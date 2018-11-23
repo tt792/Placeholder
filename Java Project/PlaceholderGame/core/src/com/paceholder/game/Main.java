@@ -5,7 +5,7 @@ import com.paceholder.game.Pickup.itemType;
 
 class Main {
 	public static void main(String[] args){
-		Player player1 = new Player(3);
+		Player player1 = new Player(5, 2, 2);
 		
 		System.out.println(player1.currentHealth);
 		player1.useHealthItem();

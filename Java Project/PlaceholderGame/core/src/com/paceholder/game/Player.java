@@ -27,6 +27,13 @@ public class Player extends Unit {
 	public int stealth;
 	
 	/**
+	 * The speed of the player
+	 * @implementation
+	 * 		Used for movement to determine how far the player moves each frame
+	 */
+	public int speed;
+	
+	/**
 	 * The stamina of the player, defining how far they can run
 	 */
 	public int maxEnergy;
@@ -77,10 +84,12 @@ public class Player extends Unit {
 	 * 			When loading the game will need to change this to take the current weapons of the player </p>
 	 * 		Health setting up
 	 */
-	public Player(int givenMaxHealth) {
+	public Player(int givenMaxHealth, int givenStealth, int givenSpeed) {
 		inventory[0] = new Pickup("Fists", itemType.Weapon, "These are your fists, time to go hit some zombies", 1);
 		inventory[1] = new Pickup("None", itemType.HealthItem,"You have no health item", 0);
 		maxHealth = givenMaxHealth;
+		speed = givenSpeed;
+		stealth = givenStealth;
 		currentHealth = maxHealth;
 	}
 	
