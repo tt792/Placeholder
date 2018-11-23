@@ -9,7 +9,7 @@ public class Pickup {
 	 * Used to distinguish between an inventory item being a health item and a weapon
 	 */
 	public enum itemType{
-		Weapon, HealthItem;
+		Weapon, HealthItem, Sneakers, Speedos;
 	}
 	
 	/**

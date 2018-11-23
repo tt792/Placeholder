@@ -5,6 +5,20 @@ import com.paceholder.game.Pickup.itemType;
 public class Player extends Unit {
 	
 	/**
+	 * The X Coordinate of the player
+	 * @implementation
+	 * 		Used to track the current location of the Player along the X axis
+	 */
+	public int x;
+	
+	/**
+	 * The Y Coordinate of the player
+	 * @implementation
+	 * 		Used to track the current location of the Player along the Y axis
+	 */
+	public int y;
+	
+	/**
 	 * The value of how see-able the player is
 	 * @implementation 
 	 * 		Used to calculate whether the player is seen by a Zombie or not <p>
@@ -47,7 +61,7 @@ public class Player extends Unit {
 	 * 		either puts the item into the inventory or will switch out the players current item in that slot
 	 * 		Do we want this to return the old item so it can be dropped?
 	 */
-	private void addItemToInventory(String givenName, itemType givenType, String givenDescription, int givenEffect) {
+	void addItemToInventory(String givenName, itemType givenType, String givenDescription, int givenEffect) {
 		if (givenType == itemType.Weapon) {
 			inventory[0] = new Pickup(givenName, givenType, givenDescription, givenEffect);
 		} else if (givenType == itemType.HealthItem) {
@@ -74,7 +88,7 @@ public class Player extends Unit {
 	 * Returns the Pickup from slot [num] in the inventory
 	 * num <== {0, 1}
 	 */
-	private Pickup viewInventory(int num) {
+	Pickup viewInventory(int num) {
 		if ((num != 0) && (num != 1)){
 			return null;
 		}
@@ -84,7 +98,7 @@ public class Player extends Unit {
 	/**
 	 * Changes the players health depending on the healthItem pickup in the players inventory
 	 */
-	private void useHealthItem() {
+	void useHealthItem() {
 		if (inventory[1] != null) {
 			if (currentHealth + inventory[1].getEffect() <= maxHealth) {
 				currentHealth += inventory[1].getEffect();
@@ -93,21 +107,5 @@ public class Player extends Unit {
 			}
 			inventory[1] = null;
 		}
-	}
-	
-	
-	
-	public static void main(String[] args){
-		Player player1 = new Player(3);
-		
-		System.out.println(player1.currentHealth);
-		player1.useHealthItem();
-		System.out.println(player1.currentHealth);
-		player1.currentHealth = 1;
-		player1.addItemToInventory("Health Pack", itemType.HealthItem, "This is a health pack", 5);
-		System.out.println(player1.inventory[1].getDescription());
-		System.out.println(player1.currentHealth);
-		player1.useHealthItem();
-		System.out.println(player1.currentHealth);
 	}
 } 
