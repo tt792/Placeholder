@@ -10,15 +10,34 @@ public class Zombie extends Unit {
 	}
 	
 	/**
+	 * The X Coordinate of the Zombie
+	 */
+	public int x;
+	
+	/**
+	 * The Y Coordinate of the Zombie
+	 */
+	public int y;
+	
+	/**
 	 * Whether this zombie attacks with melee or not
 	 */
 	public boolean melee;
 	
 	/**
-	 * how far the zombie can see the player from
+	 * How far the zombie can see the player from
 	 */
 	public int sight;
 	
+	/**
+	 * The time the zombies must wait between attacks
+	 */
+	public int attackDelay;
+	
+	/**
+	 * The last millisecond the zombie attacked
+	 */
+	public long lastAttack = 0;
 	/**
 	 * Function to test if this zombie can see the player
 	 * 
@@ -51,6 +70,12 @@ public class Zombie extends Unit {
 	 * 	when within striking distance swipe at the player
 	 */
 	public void attack() {
-		
+		if (melee) {
+			if (System.currentTimeMillis() >= lastAttack + attackDelay) {
+				//Add attacking code
+				
+				lastAttack = System.currentTimeMillis();
+			}
+		}
 	}
 }
