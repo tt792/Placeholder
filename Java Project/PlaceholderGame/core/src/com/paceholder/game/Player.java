@@ -7,8 +7,8 @@ public class Player extends Unit {
 	/**
 	 * The value of how see-able the player is
 	 * @implementation 
-	 * 		Used to calculate wether the player is seen by a zombie or not <p>
-	 * 		will have a function to update the zombies range when the game starts and when the player picks up a stealth item
+	 * 		Used to calculate whether the player is seen by a Zombie or not <p>
+	 * 		will have a function to update the Zombies range when the game starts and when the player picks up a stealth item
 	 */
 	public int stealth;
 	
@@ -21,7 +21,7 @@ public class Player extends Unit {
 	 * The 2-slot inventory of the player
 	 * <p>
 	 * Still need to finally decide on what data type this should be <br>
-	 * As it is cant reference the items in Weapon or HealthItem as are using their super
+	 * As it is can't reference the items in Weapon or HealthItem as are using their super
 	 * Could have both Weapon and HealthItem as the same class and just use the type to differentiate them
 	 * </p>
 	 *  @Description
@@ -36,7 +36,7 @@ public class Player extends Unit {
 	/**
 	 * The score of the player
 	 * @description
-	 * 		Will increase as the player defeats zombies and moves through locations
+	 * 		Will increase as the player defeats Zombies and moves through locations
 	 */
 	public int credits;
 	
