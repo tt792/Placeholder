@@ -52,7 +52,7 @@ public class Player extends Unit {
 	 *  	Inventory[1] - Player's Health item <p>
 	 *  	test for the Pickup.itemType to decide what to do with it
 	 */
-	public Pickup[] inventory = new Pickup[2];
+	private Pickup[] inventory = new Pickup[2];
 	
 	/**
 	 * The score of the player
@@ -63,16 +63,21 @@ public class Player extends Unit {
 	
 	/**
 	 * Function to add an item to the 2-item inventory
+	 * Returns boolean of wether the item was added to the inventory
 	 * 
 	 * @implementation
 	 * 		either puts the item into the inventory or will switch out the players current item in that slot
 	 * 		Do we want this to return the old item so it can be dropped?
 	 */
-	void addItemToInventory(String givenName, itemType givenType, String givenDescription, int givenEffect) {
+	boolean addItemToInventory(String givenName, itemType givenType, String givenDescription, int givenEffect) {
 		if (givenType == itemType.Weapon) {
 			inventory[0] = new Pickup(givenName, givenType, givenDescription, givenEffect);
+			return true;
 		} else if (givenType == itemType.HealthItem) {
 			inventory[1] = new Pickup(givenName, givenType, givenDescription, givenEffect);
+			return true;
+		} else {
+			return false;
 		}
 	}
 	

@@ -12,7 +12,7 @@ class Main {
 		System.out.println(player1.currentHealth);
 		player1.currentHealth = 1;
 		player1.addItemToInventory("Health Pack", itemType.HealthItem, "This is a health pack", 5);
-		System.out.println(player1.inventory[1].getDescription());
+		System.out.println(player1.viewInventory(0).getDescription());
 		System.out.println(player1.currentHealth);
 		player1.useHealthItem();
 		System.out.println(player1.currentHealth);
