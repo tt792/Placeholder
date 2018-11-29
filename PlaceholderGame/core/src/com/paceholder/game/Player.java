@@ -1,5 +1,8 @@
 package com.paceholder.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.paceholder.game.Pickup.itemType;
 
@@ -32,9 +35,17 @@ public class Player extends Unit {
 	 * 		will have a function to update the Zombies range when the game starts and when the player picks up a stealth item
 	 */
 	private int stealth;
-	public void changeStealth(int stealthAddition) {
-		stealth += stealthAddition;
+	/**
+	 * Function to change the stealth of the player
+	 * @implementation
+	 * 		either send a positive or negative int to increase or decrease the players stealth
+	 */
+	public void changeStealth(int givenInt) {
+		stealth += givenInt;
 	}
+	/**
+	 * Function to return the value of the players stealth
+	 */
 	public int getStealth() {
 		return stealth;
 	}
@@ -43,6 +54,12 @@ public class Player extends Unit {
 	 * The stamina of the player, defining how far they can run
 	 */
 	private int stamina;
+	/**
+	 * Function to return the value of the players stamina
+	 */
+	public int getStamina() {
+		return stamina;
+	}
 	
 	/**
 	 * The 2-slot inventory of the player of Pickup
@@ -61,6 +78,20 @@ public class Player extends Unit {
 	 * 		Will increase as the player defeats Zombies and moves through locations
 	 */
 	private int credits;
+	/**
+	 * Function to return the value of the players credits
+	 */
+	public int getCredits() {
+		return credits;
+	}
+	/**
+	 * Function to change the value of the players credits with
+	 * @implementation
+	 * 		either send a positive or negative int to increase or decrease the players credits
+	 */
+	public void changeCredits(int givenInt) {
+		credits += givenInt;
+	}
 	
 	/**
 	 * Function to add an item to the 2-item inventory
@@ -101,6 +132,7 @@ public class Player extends Unit {
 	 * 		Use other constructor for loading a player into the game
 	 */
 	public Player(playerType givenType) {
+		sprite = new Sprite(new Texture(Gdx.files.internal("Player.png")));
 		addItemToInventory("None", itemType.HealthItem,"You have no health item", 0, "HealthPack.png");
 		type = Nature.Player;
 		playerClass = givenType;
@@ -124,7 +156,7 @@ public class Player extends Unit {
 			
 		} else if (givenType == playerType.Art) {
 			addItemToInventory("Medicinal Herbs", itemType.HealthItem,"Feels good man...", 0, "HealthPack.png");
-			//peeeeeeeeta
+			//peeeeeeeeta hide yourself by drawing rocks....
 		}
 	}
 	
@@ -141,6 +173,7 @@ public class Player extends Unit {
 		 * can get the max health, stealth, speed from what type the player is
 		 * ie. if the players a Nerd they have x health, y speed and u 
 		 */
+		sprite = new Sprite(new Texture(Gdx.files.internal("Player.png")));
 		addItemToInventory("Fists", itemType.Weapon, "These are your fists, time to go hit some zombies", 1, "Sword.png");
 		addItemToInventory("None", itemType.HealthItem,"You have no health item", 0, "HealthPack.png");
 		type = Nature.Player;
@@ -166,13 +199,13 @@ public class Player extends Unit {
 	 * Changes the players health depending on the healthItem pickup in the players inventory
 	 */
 	void useHealthItem() {
-		if (inventory[1] != null) {
-			if (currentHealth + inventory[1].getEffect() <= maxHealth) {
+		if (inventory[1].getName() != "None") { //if the name is None then the player has no health item
+			if (currentHealth + inventory[1].getEffect() <= maxHealth) { //add the health buff to the players health, limiting it to the max health of the player
 				currentHealth += inventory[1].getEffect();
 			} else {
 				currentHealth = maxHealth;
 			}
-			inventory[1] = null;
+			addItemToInventory("None", itemType.HealthItem,"You have no health item", 0, "HealthPack.png");
 		}
 	}
 } 

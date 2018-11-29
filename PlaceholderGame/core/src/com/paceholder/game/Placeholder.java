@@ -36,7 +36,6 @@ public class Placeholder extends ApplicationAdapter {
 	
 	//to be replaced when player and enemy has sprite
 	Player player;
-	Vector2 playerXY = new Vector2(0,0);
 	
 	Sprite enemy;
 	Vector2 enemyXY = new Vector2(0,0);
@@ -47,8 +46,8 @@ public class Placeholder extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		player = new Player(5, 5, 2, 2, 0, 0);
 		enemy = new Sprite(new Texture(Gdx.files.internal("Enemy.jpg")));
-		playerXY.x += player.sprite.getWidth() / 2;
-		playerXY.y += player.sprite.getHeight() / 2;
+		player.xy.x += player.sprite.getWidth() / 2;
+		player.xy.x += player.sprite.getHeight() / 2;
 		enemyXY.x += enemy.getWidth() / 2;
 		enemyXY.y += enemy.getHeight() / 2;
 		player.sprite.setScale(0.2f);
@@ -66,19 +65,24 @@ public class Placeholder extends ApplicationAdapter {
 		
 		//player Movement
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			playerXY.x -= 1;
+			player.xy.x -= 1;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			playerXY.x += 1;
+			player.xy.x += 1;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			playerXY.y += 1;
+			player.xy.y += 1;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			playerXY.y -= 1;
+			player.xy.y -= 1;
 		}
-		player.sprite.setPosition(playerXY.x, playerXY.y);
-		//do sprite drawing here
+		player.sprite.setPosition(player.xy.x, player.xy.y);
+		/**
+		 * TODO:
+		 * 		Write code to figure out where the player is on screen and only move the camera if the player is close to the edge of the screen
+		 * 		IE. move the camera in same direction as the player if the difference between the players x/y is more than 45% of the screen width then move the camera towards the player?
+		 */
+		//do sprite drawing within the batch.begin() and batch.end()
 		batch.begin();
 		batch.setProjectionMatrix(camera.combined);
 		camera.position.set(player.sprite.getX() + player.sprite.getWidth() / 2, player.sprite.getY() + player.sprite.getHeight() / 2, 0);
