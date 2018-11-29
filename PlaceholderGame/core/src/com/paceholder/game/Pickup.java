@@ -1,9 +1,18 @@
 package com.paceholder.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
 /**
  * Superclass of Weapon and HealthItem
  */
 public class Pickup {
+	
+	/**
+	 * Sprite of the Pickups, used for drawing and moving the 
+	 */
+	Sprite sprite = null;
 	
 	/**
 	 * Used to distinguish between an inventory item being a health item and a weapon
@@ -69,11 +78,14 @@ public class Pickup {
 	 * 		Requires <br>
 	 * 		- Name <br>
 	 * 		- Type <br>
+	 * 		- Effect <br>
+	 * 		- Texture <br>
 	 */
-	public Pickup(String givenName, itemType givenType, String givenDescription, int givenEffect) {
+	public Pickup(String givenName, itemType givenType, String givenDescription, int givenEffect, String givenFileName) {
 		name = givenName;
 		type = givenType;
 		description = givenDescription;
 		effect = givenEffect;
+		sprite = new Sprite(new Texture(Gdx.files.internal(givenFileName)));
 	}
 }

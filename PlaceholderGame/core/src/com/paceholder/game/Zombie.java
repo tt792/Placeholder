@@ -10,16 +10,6 @@ public class Zombie extends Unit {
 	}
 	
 	/**
-	 * The X Coordinate of the Zombie
-	 */
-	public int x;
-	
-	/**
-	 * The Y Coordinate of the Zombie
-	 */
-	public int y;
-	
-	/**
 	 * Whether this zombie attacks with melee or not
 	 */
 	public boolean melee;
@@ -77,5 +67,14 @@ public class Zombie extends Unit {
 				lastAttack = System.currentTimeMillis();
 			}
 		}
+	}
+	
+	/**
+	 * Method for creating a new Zombie
+	 * @return 
+	 */
+	public Zombie() {
+		type = Nature.Zombie;
+		
 	}
 }

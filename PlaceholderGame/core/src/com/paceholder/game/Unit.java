@@ -1,6 +1,21 @@
 package com.paceholder.game;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
+
 public class Unit {
+	/**
+	 * The sprite of the Unit
+	 */
+	Sprite sprite;
+	
+	/**
+	 * The X and Y Coordinate of the Unit
+	 * @implementation
+	 * 		Used to track the current location of the Unit along the X and Y axis
+	 */
+	public Vector2 xy;
+	
 	/**
 	 * The name of the entity
 	 */
@@ -14,10 +29,9 @@ public class Unit {
 	}
 	
 	/**
-	 * The value for the units attack
-	 * @description Used for calculations of damaging other units
+	 * The public reference to the type of this unit
 	 */
-	public int Power;
+	public Nature type;
 	
 	/**
 	 * The maximum health of this Unit
@@ -35,5 +49,5 @@ public class Unit {
 	 * The agility of this Unit
 	 * @description The speed the unit can move around the map
 	 */
-	public int agility;
+	public int speed;
 }

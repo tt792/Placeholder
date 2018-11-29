@@ -1,22 +1,29 @@
 package com.paceholder.game;
 
+import com.badlogic.gdx.math.Vector2;
 import com.paceholder.game.Pickup.itemType;
 
 public class Player extends Unit {
+	/**
+	 * Enum for the defining classes of the player
+	 */
+	private enum playerType{
+		Nerd, Jock, Art
+	}
 	
 	/**
-	 * The X Coordinate of the player
-	 * @implementation
-	 * 		Used to track the current location of the Player along the X axis
+	 * The players class
+	 * @Description
+	 * 		Either Nerd, Jock
 	 */
-	public int x;
+	private playerType playerClass;
 	
 	/**
-	 * The Y Coordinate of the player
-	 * @implementation
-	 * 		Used to track the current location of the Player along the Y axis
+	 * Returns the players class type
 	 */
-	public int y;
+	public playerType getPlayerClass() {
+		return playerClass;
+	}
 	
 	/**
 	 * The value of how see-able the player is
@@ -24,27 +31,21 @@ public class Player extends Unit {
 	 * 		Used to calculate whether the player is seen by a Zombie or not <p>
 	 * 		will have a function to update the Zombies range when the game starts and when the player picks up a stealth item
 	 */
-	public int stealth;
-	
-	/**
-	 * The speed of the player
-	 * @implementation
-	 * 		Used for movement to determine how far the player moves each frame
-	 */
-	public int speed;
+	private int stealth;
+	public void changeStealth(int stealthAddition) {
+		stealth += stealthAddition;
+	}
+	public int getStealth() {
+		return stealth;
+	}
 	
 	/**
 	 * The stamina of the player, defining how far they can run
 	 */
-	public int maxEnergy;
+	private int stamina;
 	
 	/**
-	 * The 2-slot inventory of the player
-	 * <p>
-	 * Still need to finally decide on what data type this should be <br>
-	 * As it is can't reference the items in Weapon or HealthItem as are using their super
-	 * Could have both Weapon and HealthItem as the same class and just use the type to differentiate them
-	 * </p>
+	 * The 2-slot inventory of the player of Pickup
 	 *  @Description
 	 *  	Uses enum types within the Pickup class to define whether the pickup is a health item or a weapon
 	 *  @Implementation
@@ -59,25 +60,71 @@ public class Player extends Unit {
 	 * @description
 	 * 		Will increase as the player defeats Zombies and moves through locations
 	 */
-	public int credits;
+	private int credits;
 	
 	/**
 	 * Function to add an item to the 2-item inventory
-	 * Returns boolean of wether the item was added to the inventory
+	 * Returns boolean of whether the item was added to the inventory
 	 * 
 	 * @implementation
 	 * 		either puts the item into the inventory or will switch out the players current item in that slot
 	 * 		Do we want this to return the old item so it can be dropped?
 	 */
-	boolean addItemToInventory(String givenName, itemType givenType, String givenDescription, int givenEffect) {
+	Pickup addItemToInventory(String givenName, itemType givenType, String givenDescription, int givenEffect, String givenFileName) {
+		Pickup tempPickup = null;
 		if (givenType == itemType.Weapon) {
-			inventory[0] = new Pickup(givenName, givenType, givenDescription, givenEffect);
-			return true;
+			tempPickup = inventory[0];
+			//call dropItem function
+			inventory[0] = new Pickup(givenName, givenType, givenDescription, givenEffect, givenFileName);
 		} else if (givenType == itemType.HealthItem) {
-			inventory[1] = new Pickup(givenName, givenType, givenDescription, givenEffect);
-			return true;
-		} else {
-			return false;
+			tempPickup = inventory[0];
+			//call dropItem function
+			inventory[1] = new Pickup(givenName, givenType, givenDescription, givenEffect, givenFileName);
+		} 
+		return tempPickup;
+	}
+	
+	/**
+	 * dropItem function
+	 *	@Description
+	 *		returns the sprite to be dropped and the location to drop it from the players X and Y
+	 */
+	public void dropItem() {
+		//TODO: implement above
+	}
+	
+	/**
+	 * Constructor for first introduction of a new player
+	 * Creating a new player at the start of the game
+	 * @Description
+	 * 		Takes the player type and builds the player around that
+	 * 		Use other constructor for loading a player into the game
+	 */
+	public Player(playerType givenType) {
+		addItemToInventory("None", itemType.HealthItem,"You have no health item", 0, "HealthPack.png");
+		type = Nature.Player;
+		playerClass = givenType;
+		if (givenType == playerType.Nerd) {
+			//update the image for it
+			addItemToInventory("Wimpy Fists", itemType.Weapon, "Your wimpy nerd fists aernt going to do anything against these zombies", 1, "Sword.png");
+			maxHealth = 3;
+			currentHealth = maxHealth;
+			stealth = 3;
+			speed = 3;
+			stamina = 5;
+			
+		} else if (givenType == playerType.Jock) {
+			//update the image for it
+			addItemToInventory("Fists", itemType.Weapon, "Your wimpy nerd fists aernt going to do anything against these zombies", 3, "Sword.png");
+			maxHealth = 4;
+			currentHealth = maxHealth;
+			stealth = 0;
+			speed = 5;
+			stamina = 4;
+			
+		} else if (givenType == playerType.Art) {
+			addItemToInventory("Medicinal Herbs", itemType.HealthItem,"Feels good man...", 0, "HealthPack.png");
+			//peeeeeeeeta
 		}
 	}
 	
@@ -87,15 +134,21 @@ public class Player extends Unit {
 	 * 		Inventory setting up <br>
 	 * 			Weapon is fists, no health item <br>
 	 * 			When loading the game will need to change this to take the current weapons of the player </p>
-	 * 		Health setting up
+	 * 		What items the player had
 	 */
-	public Player(int givenMaxHealth, int givenStealth, int givenSpeed) {
-		inventory[0] = new Pickup("Fists", itemType.Weapon, "These are your fists, time to go hit some zombies", 1);
-		inventory[1] = new Pickup("None", itemType.HealthItem,"You have no health item", 0);
+	public Player(int givenMaxHealth, int givenCurrentHealth, int givenStealth, int givenSpeed, int givenX, int givenY) {
+		/*
+		 * can get the max health, stealth, speed from what type the player is
+		 * ie. if the players a Nerd they have x health, y speed and u 
+		 */
+		addItemToInventory("Fists", itemType.Weapon, "These are your fists, time to go hit some zombies", 1, "Sword.png");
+		addItemToInventory("None", itemType.HealthItem,"You have no health item", 0, "HealthPack.png");
+		type = Nature.Player;
 		maxHealth = givenMaxHealth;
-		speed = givenSpeed;
+		stamina = givenSpeed;
 		stealth = givenStealth;
-		currentHealth = maxHealth;
+		currentHealth = givenCurrentHealth;
+		xy = new Vector2(givenX, givenY);
 	}
 	
 	/**

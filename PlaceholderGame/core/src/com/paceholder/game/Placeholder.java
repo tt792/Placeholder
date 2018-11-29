@@ -35,7 +35,7 @@ public class Placeholder extends ApplicationAdapter {
 	OrthographicCamera camera;
 	
 	//to be replaced when player and enemy has sprite
-	Sprite player;
+	Player player;
 	Vector2 playerXY = new Vector2(0,0);
 	
 	Sprite enemy;
@@ -45,15 +45,16 @@ public class Placeholder extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		player = new Sprite(new Texture("C:\\Users\\TGWTu\\Documents\\Placeholder-Master\\Placeholder-Master\\Java Project\\PlaceholderGame\\core\\assets/Player.png"));
-		enemy = new Sprite(new Texture("C:\\Users\\TGWTu\\Documents\\Placeholder-Master\\Placeholder-Master\\Java Project\\PlaceholderGame\\core\\assets/Enemy.jpg"));
-		playerXY.x += player.getWidth() / 2;
-		playerXY.y += player.getHeight() / 2;
+		player = new Player(5, 5, 2, 2, 0, 0);
+		enemy = new Sprite(new Texture(Gdx.files.internal("Enemy.jpg")));
+		playerXY.x += player.sprite.getWidth() / 2;
+		playerXY.y += player.sprite.getHeight() / 2;
 		enemyXY.x += enemy.getWidth() / 2;
 		enemyXY.y += enemy.getHeight() / 2;
-		player.setScale(0.2f);
+		player.sprite.setScale(0.2f);
 		enemy.setScale(0.2f);
-
+		
+		//create camera for scene
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false);
 	}
@@ -76,13 +77,13 @@ public class Placeholder extends ApplicationAdapter {
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
 			playerXY.y -= 1;
 		}
-		player.setPosition(playerXY.x, playerXY.y);
+		player.sprite.setPosition(playerXY.x, playerXY.y);
 		//do sprite drawing here
 		batch.begin();
 		batch.setProjectionMatrix(camera.combined);
-		camera.position.set(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, 0);
+		camera.position.set(player.sprite.getX() + player.sprite.getWidth() / 2, player.sprite.getY() + player.sprite.getHeight() / 2, 0);
 		camera.update();
-		player.draw(batch);
+		player.sprite.draw(batch);
 		enemy.draw(batch);
 		batch.end();
 	}
