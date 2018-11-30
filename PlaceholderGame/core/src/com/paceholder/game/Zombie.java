@@ -1,13 +1,18 @@
 package com.paceholder.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
 public class Zombie extends Unit {
 	
 	/**
 	 * Which type this zombie is
 	 */
-	public enum type {
+	public enum zombieType {
 		Big, Small, Ranged;
 	}
+	public zombieType zombieClass;
 	
 	/**
 	 * Whether this zombie attacks with melee or not
@@ -17,7 +22,13 @@ public class Zombie extends Unit {
 	/**
 	 * How far the zombie can see the player from
 	 */
-	public int sight;
+	private int sight;
+	/**
+	 * Function to return the value of this zombies sight
+	 */
+	public int getSight() {
+		return sight;
+	}
 	
 	/**
 	 * The time the zombies must wait between attacks
@@ -28,6 +39,7 @@ public class Zombie extends Unit {
 	 * The last millisecond the zombie attacked
 	 */
 	public long lastAttack = 0;
+	
 	/**
 	 * Function to test if this zombie can see the player
 	 * 
@@ -43,7 +55,6 @@ public class Zombie extends Unit {
 	 * Function for controlling the zombies movement
 	 * 
 	 * @implementation
-	 * 	using an A* pathing method to calculate the best path between different locations
 	 * 	will move randomly in a slow motion from randomly selected points to other randomly selected points
 	 *	
 	 *	If the zombie can see the player then move towards the player
@@ -71,10 +82,22 @@ public class Zombie extends Unit {
 	
 	/**
 	 * Method for creating a new Zombie
-	 * @return 
 	 */
-	public Zombie() {
+	public Zombie(zombieType givenZombieType) {
+		/*
+		 * if passed what type this zombie is, randomly assign one of the textures for that type of zombie
+		 */
 		type = Nature.Zombie;
-		
+		zombieClass = zombieType.Big;
+		if (givenZombieType == zombieType.Big) {
+			//randomly choose the texture for this Zombie
+			sprite = new Sprite(new Texture(Gdx.files.internal("enemy.jpg")));
+			
+			melee = true;
+			attackDelay = 1;
+			sight = 5;
+		} else if (givenZombieType == zombieType.Ranged) {
+			//as above
+		}
 	}
 }

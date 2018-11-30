@@ -1,6 +1,7 @@
 package com.paceholder.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -193,6 +194,32 @@ public class Player extends Unit {
 			return null;
 		}
 		return inventory[num];
+	}
+	
+	/**
+	 * Function taking keyboard input and moving the player
+	 * @input
+	 * 		Keyboard Input: <br>
+	 * 			W - Y+ <br>
+	 * 			A - X- <br>
+	 * 			S - Y- <br>
+	 * 			D - x+ <br>
+	 * Change how much the inputs move the player when we have a map
+	 */
+	public void move() {
+		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+			xy.y += 1;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+			xy.y -= 1;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+			xy.x -= 1;
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.D)) {
+			xy.x += 1;
+		}
+		sprite.setPosition(xy.x, xy.y);
 	}
 	
 	/**

@@ -64,19 +64,7 @@ public class Placeholder extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		//player Movement
-		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			player.xy.x -= 1;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			player.xy.x += 1;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			player.xy.y += 1;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			player.xy.y -= 1;
-		}
-		player.sprite.setPosition(player.xy.x, player.xy.y);
+		player.move();
 		/**
 		 * TODO:
 		 * 		Write code to figure out where the player is on screen and only move the camera if the player is close to the edge of the screen
