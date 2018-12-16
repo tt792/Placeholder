@@ -3,13 +3,18 @@ package com.paceholder.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.*;
 
 
 /*
@@ -34,6 +39,15 @@ public class Placeholder extends ApplicationAdapter {
 	TiledMapRenderer tiledMaprenderer;
 	OrthographicCamera camera;
 	
+	//UI Stuff
+	Stage stage;
+	Table table;
+	Skin skin;
+	
+	Label test;
+	
+	boolean inMenu = true;
+	
 	//to be replaced when player and enemy has sprite
 	Player player;
 	
@@ -43,9 +57,23 @@ public class Placeholder extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
+		//UI Create
+		stage = new Stage();
+		Gdx.input.setInputProcessor(stage);
+		
+		skin = new Skin(Gdx.files.internal("UI/uiskin.json"));
+		
+		table = new Table();
+		test = new Label("test", skin);
+		
+		table.setFillParent(true);
+		table.add(test);
+		
+		stage.addActor(table);
+		
 		batch = new SpriteBatch();
 		player = new Player(5, 5, 2, 2, 0, 0);
-		enemy = new Sprite(new Texture(Gdx.files.internal("Enemy.jpg")));
+		enemy = new Sprite(new Texture(Gdx.files.internal("enemy.jpg")));
 		player.xy.x += player.sprite.getWidth() / 2;
 		player.xy.x += player.sprite.getHeight() / 2;
 		enemyXY.x += enemy.getWidth() / 2;
@@ -63,25 +91,34 @@ public class Placeholder extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+		if (inMenu) {
+			stage.act(Gdx.graphics.getDeltaTime());
+			stage.draw();
+		}
+		
+		//Only move and render game if out of menu
+		if (!inMenu) {
 		//player Movement
-		player.move();
-		/**
-		 * TODO:
-		 * 		Write code to figure out where the player is on screen and only move the camera if the player is close to the edge of the screen
-		 * 		IE. move the camera in same direction as the player if the difference between the players x/y is more than 45% of the screen width then move the camera towards the player?
-		 */
-		//do sprite drawing within the batch.begin() and batch.end()
-		batch.begin();
-		batch.setProjectionMatrix(camera.combined);
-		camera.position.set(player.sprite.getX() + player.sprite.getWidth() / 2, player.sprite.getY() + player.sprite.getHeight() / 2, 0);
-		camera.update();
-		player.sprite.draw(batch);
-		enemy.draw(batch);
-		batch.end();
+			player.move();
+			/**
+			 * TODO:
+			 * 		Write code to figure out where the player is on screen and only move the camera if the player is close to the edge of the screen
+			 * 		IE. move the camera in same direction as the player if the difference between the players x/y is more than 45% of the screen width then move the camera towards the player?
+			 */
+			//do sprite drawing within the batch.begin() and batch.end()
+			batch.begin();
+			batch.setProjectionMatrix(camera.combined);
+			camera.position.set(player.sprite.getX() + player.sprite.getWidth() / 2, player.sprite.getY() + player.sprite.getHeight() / 2, 0);
+			camera.update();
+			player.sprite.draw(batch);
+			enemy.draw(batch);
+			batch.end();
+		}
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
+		stage.dispose();
 	}
 }
