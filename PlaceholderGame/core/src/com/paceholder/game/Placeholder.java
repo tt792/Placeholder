@@ -2,13 +2,15 @@ package com.paceholder.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 
@@ -31,7 +33,8 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Placeholder extends ApplicationAdapter {
 	SpriteBatch batch;
-	TiledMapRenderer tiledMaprenderer;
+	TiledMapRenderer tiledMapRenderer;
+	TiledMap tiledMap;
 	OrthographicCamera camera;
 	
 	//to be replaced when player and enemy has sprite
@@ -44,13 +47,24 @@ public class Placeholder extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		player = new Player(5, 5, 2, 2, 0, 0);
+		player = new Player(Player.playerType.Nerd);
+		
+		/*
+		 * Load and create the tiled map for the player to move around on 
+		 */
+		tiledMap = new TmxMapLoader().load("E:\\Downloads\\Placeholder-master\\PlaceholderGame\\core\\assets\\Tiles for testing\\Map1.tmx");
+	    tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+		
+		/*
+		 * TODO:
+		 * Change the enemy creation and such so its not done here
+		 */
 		enemy = new Sprite(new Texture(Gdx.files.internal("Enemy.jpg")));
 		player.xy.x += player.sprite.getWidth() / 2;
 		player.xy.x += player.sprite.getHeight() / 2;
 		enemyXY.x += enemy.getWidth() / 2;
 		enemyXY.y += enemy.getHeight() / 2;
-		player.sprite.setScale(0.2f);
+		player.sprite.setScale(0.1f);
 		enemy.setScale(0.2f);
 		
 		//create camera for scene
@@ -68,9 +82,11 @@ public class Placeholder extends ApplicationAdapter {
 		/**
 		 * TODO:
 		 * 		Write code to figure out where the player is on screen and only move the camera if the player is close to the edge of the screen
-		 * 		IE. move the camera in same direction as the player if the difference between the players x/y is more than 45% of the screen width then move the camera towards the player?
+		 * 		IE. move the camera in same direction as the player if the difference between the players x/y and camera centre is more than 45% of the screen width then move the camera towards the player?
 		 */
 		//do sprite drawing within the batch.begin() and batch.end()
+		tiledMapRenderer.setView(camera);
+		tiledMapRenderer.render();
 		batch.begin();
 		batch.setProjectionMatrix(camera.combined);
 		camera.position.set(player.sprite.getX() + player.sprite.getWidth() / 2, player.sprite.getY() + player.sprite.getHeight() / 2, 0);

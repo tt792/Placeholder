@@ -50,4 +50,9 @@ public class Unit {
 	 * @description The speed the unit can move around the map
 	 */
 	public int speed;
+	
+	/**
+	 * The speed of this unit when sprinting
+	 */
+	public int sprintSpeed;
 }

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
- * Superclass of Weapon and HealthItem
+ * Class for all pickups including weapons
  */
 public class Pickup {
 	

@@ -11,7 +11,7 @@ public class Player extends Unit {
 	/**
 	 * Enum for the defining classes of the player
 	 */
-	private enum playerType{
+	public enum playerType{
 		Nerd, Jock, Art
 	}
 	
@@ -54,7 +54,7 @@ public class Player extends Unit {
 	/**
 	 * The stamina of the player, defining how far they can run
 	 */
-	private int stamina;
+	private int stamina, maxStamina;
 	/**
 	 * Function to return the value of the players stamina
 	 */
@@ -129,7 +129,7 @@ public class Player extends Unit {
 	 * Constructor for first introduction of a new player
 	 * Creating a new player at the start of the game
 	 * @Description
-	 * 		Takes the player type and builds the player around that
+	 * 		Takes the player type and builds the player around that, is for creating a new player at the beginning of the game </br>
 	 * 		Use other constructor for loading a player into the game
 	 */
 	public Player(playerType givenType) {
@@ -144,18 +144,23 @@ public class Player extends Unit {
 			currentHealth = maxHealth;
 			stealth = 3;
 			speed = 3;
-			stamina = 5;
-			
+			sprintSpeed = 5;
+			stamina = 50;
+			maxStamina = stamina;
+			xy = new Vector2(0, 0);
 		} else if (givenType == playerType.Jock) {
 			//update the image for it
-			addItemToInventory("Fists", itemType.Weapon, "Your wimpy nerd fists aernt going to do anything against these zombies", 3, "Sword.png");
+			addItemToInventory("Fists", itemType.Weapon, "Your strong fists allow you to easily get through these enemies", 3, "Sword.png");
 			maxHealth = 4;
 			currentHealth = maxHealth;
 			stealth = 0;
 			speed = 5;
-			stamina = 4;
+			sprintSpeed = 7;
+			stamina = 40;
+			maxStamina = stamina;
+			xy = new Vector2(0, 0);
 			
-		} else if (givenType == playerType.Art) {
+		} else if (givenType == playerType.Art) { //TODO: the third class in the game
 			addItemToInventory("Medicinal Herbs", itemType.HealthItem,"Feels good man...", 0, "HealthPack.png");
 			//peeeeeeeeta hide yourself by drawing rocks....
 		}
@@ -169,7 +174,7 @@ public class Player extends Unit {
 	 * 			When loading the game will need to change this to take the current weapons of the player </p>
 	 * 		What items the player had
 	 */
-	public Player(int givenMaxHealth, int givenCurrentHealth, int givenStealth, int givenSpeed, int givenX, int givenY) {
+	public Player(int givenMaxHealth, int givenCurrentHealth, int givenStealth, int givenSpeed, int givenStamina, int givenSprintSpeed, int givenX, int givenY) {
 		/*
 		 * can get the max health, stealth, speed from what type the player is
 		 * ie. if the players a Nerd they have x health, y speed and u 
@@ -179,8 +184,11 @@ public class Player extends Unit {
 		addItemToInventory("None", itemType.HealthItem,"You have no health item", 0, "HealthPack.png");
 		type = Nature.Player;
 		maxHealth = givenMaxHealth;
-		stamina = givenSpeed;
+		speed = givenSpeed;
+		stamina = givenStamina;
+		maxStamina = stamina;
 		stealth = givenStealth;
+		sprintSpeed = givenSprintSpeed;
 		currentHealth = givenCurrentHealth;
 		xy = new Vector2(givenX, givenY);
 	}
@@ -203,23 +211,70 @@ public class Player extends Unit {
 	 * 			W - Y+ <br>
 	 * 			A - X- <br>
 	 * 			S - Y- <br>
-	 * 			D - x+ <br>
+	 * 			D - X+ <br>
 	 * Change how much the inputs move the player when we have a map
 	 */
 	public void move() {
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			xy.y += 1;
+			if (sprintHeld() && stamina > 0) {
+				xy.y += sprintSpeed;
+				stamina -= 1;
+			} else {
+				xy.y += speed;
+				updateStamina();
+			}
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			xy.y -= 1;
+			if (sprintHeld() && stamina > 0) {
+				xy.y -= sprintSpeed;
+				stamina -= 1;
+			} else {
+				xy.y -= speed;
+				updateStamina();
+			}
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			xy.x -= 1;
+			if (sprintHeld() && stamina > 0) {
+				xy.x -= sprintSpeed;
+				stamina -= 1;
+			} else {
+				xy.x -= speed;
+				updateStamina();
+			}
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.D)) {
-			xy.x += 1;
+			if (sprintHeld() && stamina > 0) {
+				xy.x += sprintSpeed;
+				stamina -= 1;
+			} else {
+				xy.x += speed;
+				updateStamina();
+			}
 		}
 		sprite.setPosition(xy.x, xy.y);
+		
+		//do some collision checking here
+		/*
+		 * before move player
+		 * check the tile that is next to the player in that direction
+		 * ie. if "W" is pressed then check the tile which is to the right by ~10px
+		 * if that tile has the "Wall" property then dont allow the movement
+		 * so will need to get the tilemaps here
+		 */
+	}
+	
+	private void updateStamina() {
+		if (stamina < maxStamina && !sprintHeld()) {
+			stamina += 1;
+		}
+	}
+	
+	private boolean sprintHeld() {
+		if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**

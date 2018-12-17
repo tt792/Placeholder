@@ -5,6 +5,7 @@ import com.paceholder.game.Pickup.itemType;
 
 class Main {
 	public static void main(String[] args){
+		/*
 		Player player1 = new Player(5, 5, 2, 2, 0, 0);
 		
 		System.out.println(player1.addItemToInventory("Sword", itemType.Weapon, "Tis a sword, a slashy thing", 10, "Sword.png").getName());
@@ -12,7 +13,7 @@ class Main {
 		System.out.println(player1.viewInventory(1).getDescription());
 		player1.addItemToInventory("Sword", itemType.HealthItem, "This is a really weird health sword... idk anymore", 10, "HealthPack.png");
 		System.out.println(player1.viewInventory(1).getDescription());
-		
+		*/
 		
 		
 		/*
