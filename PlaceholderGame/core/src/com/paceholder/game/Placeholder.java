@@ -46,6 +46,8 @@ public class Placeholder extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
+		UI.create();
+		
 		batch = new SpriteBatch();
 		player = new Player(Player.playerType.Nerd);
 		
@@ -77,6 +79,10 @@ public class Placeholder extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+		UI.render();
+		
+		//Only move and render game if out of menu
+		if (!UI.inMenu) {
 		//player Movement
 		player.move();
 		/**
@@ -94,10 +100,12 @@ public class Placeholder extends ApplicationAdapter {
 		player.sprite.draw(batch);
 		enemy.draw(batch);
 		batch.end();
+		}
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
+		UI.dispose();
 	}
 }
