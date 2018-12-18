@@ -38,6 +38,7 @@ public class Placeholder extends ApplicationAdapter {
 	OrthographicCamera camera;
 	
 	//to be replaced when player and enemy has sprite
+	Player player;
 	
 	Sprite enemy;
 	Vector2 enemyXY = new Vector2(0,0);
@@ -48,6 +49,7 @@ public class Placeholder extends ApplicationAdapter {
 		UI.create();
 		
 		batch = new SpriteBatch();
+		player = new Player(Player.playerType.Nerd);
 		
 		/*
 		 * Load and create the tiled map for the player to move around on 
@@ -59,12 +61,12 @@ public class Placeholder extends ApplicationAdapter {
 		 * TODO:
 		 * Change the enemy creation and such so its not done here
 		 */
-		enemy = new Sprite(new Texture(Gdx.files.internal("Enemy.jpg")));
-		UI.player.xy.x += UI.player.sprite.getWidth() / 2;
-		UI.player.xy.x += UI.player.sprite.getHeight() / 2;
+		enemy = new Sprite(new Texture(Gdx.files.internal("enemy.jpg")));
+		player.xy.x += player.sprite.getWidth() / 2;
+		player.xy.x += player.sprite.getHeight() / 2;
 		enemyXY.x += enemy.getWidth() / 2;
 		enemyXY.y += enemy.getHeight() / 2;
-		UI.player.sprite.setScale(0.1f);
+		player.sprite.setScale(0.1f);
 		enemy.setScale(0.2f);
 		
 		//create camera for scene
@@ -81,8 +83,8 @@ public class Placeholder extends ApplicationAdapter {
 		
 		//Only move and render game if out of menu
 		if (!UI.inMenu) {
-			//player Movement
-			UI.player.move();
+		//player Movement
+			player.move();
 			/**
 			 * TODO:
 			 * 		Write code to figure out where the player is on screen and only move the camera if the player is close to the edge of the screen
@@ -93,9 +95,9 @@ public class Placeholder extends ApplicationAdapter {
 			tiledMapRenderer.render();
 			batch.begin();
 			batch.setProjectionMatrix(camera.combined);
-			camera.position.set(UI.player.sprite.getX() + UI.player.sprite.getWidth() / 2, UI.player.sprite.getY() + UI.player.sprite.getHeight() / 2, 0);
+			camera.position.set(player.sprite.getX() + player.sprite.getWidth() / 2, player.sprite.getY() + player.sprite.getHeight() / 2, 0);
 			camera.update();
-			UI.player.sprite.draw(batch);
+			player.sprite.draw(batch);
 			enemy.draw(batch);
 			batch.end();
 		}

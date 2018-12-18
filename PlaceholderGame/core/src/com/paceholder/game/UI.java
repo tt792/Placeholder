@@ -28,7 +28,7 @@ public class UI {
 	static boolean selectDrawn = false;
 	static boolean inMenu = true;
 	
-	static Player player;
+	static Player.playerType desiredType;
 
 	static void drawMainMenu() {
 		table.clear();
@@ -93,7 +93,7 @@ public class UI {
 		normal = new TextButton("Normal Character", skin);
 		normal.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-				player = new Player(Player.playerType.Nerd);
+				desiredType = Player.playerType.Nerd;
 				inMenu = false;
 			}
 		});
@@ -101,7 +101,7 @@ public class UI {
 		sneaky = new TextButton("Sneaky Character", skin);
 		sneaky.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-				player = new Player(Player.playerType.Art);
+				desiredType = Player.playerType.Art;
 				inMenu = false;
 			}
 		});
@@ -109,7 +109,7 @@ public class UI {
 		stronk = new TextButton("Strong Character", skin);
 		stronk.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-				player = new Player(Player.playerType.Jock);
+				desiredType = Player.playerType.Jock;
 				inMenu = false;
 			}
 		});
