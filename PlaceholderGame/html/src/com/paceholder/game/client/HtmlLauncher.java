@@ -3,7 +3,7 @@ package com.paceholder.game.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.paceholder.game.Placeholder;
+import com.placeholder.game.Placeholder;
 
 
 public class HtmlLauncher extends GwtApplication {

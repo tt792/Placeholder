@@ -1,4 +1,4 @@
-package com.paceholder.game;
+package com.placeholder.game;
 
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -106,7 +106,7 @@ public class UI {
 			}
 		});
 		
-		stronk = new TextButton("Strong Character", skin);
+		stronk = new TextButton("Stronkg Character", skin);
 		stronk.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 				desiredType = Player.playerType.Jock;
