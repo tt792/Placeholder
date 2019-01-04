@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont; //testing
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -12,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 
 /*
@@ -38,6 +38,11 @@ public class Placeholder extends ApplicationAdapter {
 	private OrthographicCamera camera;
 	Player player;
 	
+	//testing
+	private float camX = 0, camY = 0;
+	private Vector2 playerDiff = new Vector2(0f, 0f);
+	
+	//end testing
 	//to be replaced when enemy has sprite
 	
 	Sprite enemy;
@@ -55,7 +60,7 @@ public class Placeholder extends ApplicationAdapter {
 		/*
 		 * Load and create the tiled map for the player to move around on
 		 */
-		tiledMap = new TmxMapLoader().load("E:\\Downloads\\Placeholder-master2\\Placeholder-master\\PlaceholderGame\\core\\assets\\Tiles for testing\\Map1.tmx");
+		tiledMap = new TmxMapLoader().load("C:\\Users\\TGWTu\\Documents\\Placeholder-master\\Placeholder-master\\PlaceholderGame\\core\\assets\\Tiles for testing\\Map1.tmx");
 	    tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 		
 		/*
@@ -84,17 +89,8 @@ public class Placeholder extends ApplicationAdapter {
 		
 		//Only move and render game if out of menu
 		if (!UI.inMenu) {
-		//player Movement
 			player.move();
-			/**
-			 * TODO:
-			 * 		Write code to figure out where the player is on screen and only move the camera if the player is close to the edge of the screen
-			 * 		IE. move the camera in same direction as the player if the difference between the players x/y and camera centre is more than 45% of the screen width then move the camera towards the player?
-			 */
-			if (updateCam()) {
-				camera.position.set(player.sprite.getX() + player.sprite.getWidth() / 2, player.sprite.getY() + player.sprite.getHeight() / 2, 0);
-				camera.update();
-			}
+			updateCam();
 			tiledMapRenderer.setView(camera);
 			tiledMapRenderer.render();
 			
@@ -104,7 +100,6 @@ public class Placeholder extends ApplicationAdapter {
 			
 			
 			player.sprite.draw(batch);
-			//enemy.draw(batch);
 			batch.end();
 		}
 	}
@@ -112,15 +107,24 @@ public class Placeholder extends ApplicationAdapter {
 	/**
 	 * Function to decide if the camera should move or not based on the players location
 	 */
-	private Boolean updateCam() {
+	private void updateCam() {
 		/*
 		 * How To?
 		 * - need direction player is moving in
 		 * - need to have camera center position? and then if there is too large a difference in player and camera
 		 * 		position the update the camera position?
 		 */
-		int screenWidth = Gdx.graphics.getWidth(), screenHeight = Gdx.graphics.getHeight();
-		return true;
+		playerDiff.x = camX - player.getX();
+		playerDiff.y = camY - player.getY();
+		if (Math.abs(playerDiff.x) > 10) { //if the players x is 10 in either direction of the cameras x
+			//change the camera's x towards the players x
+			camX -= playerDiff.x * Gdx.graphics.getDeltaTime(); //Smoothly moves the camera towards the player
+		}
+		if (Math.abs(playerDiff.y) > 10) { //if player is 10 away either up or down
+			camY -= playerDiff.y * Gdx.graphics.getDeltaTime();
+		}
+		camera.position.set(new Vector3(camX, camY, 0));
+		camera.update();
 	}
 	
 	@Override

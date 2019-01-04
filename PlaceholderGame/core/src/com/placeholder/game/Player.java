@@ -4,13 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.placeholder.game.Pickup.itemType;
 
@@ -154,7 +150,7 @@ public class Player extends Unit {
 		addItemToInventory("None", itemType.HealthItem,"You have no health item", 0, "HealthPack.png");
 		type = Nature.Player;
 		playerClass = givenType;
-		map = new TmxMapLoader().load("E:\\Downloads\\Placeholder-master2\\Placeholder-master\\PlaceholderGame\\core\\assets\\Tiles for testing\\Map1.tmx");
+		map = new TmxMapLoader().load("C:\\Users\\TGWTu\\Documents\\Placeholder-master\\Placeholder-master\\PlaceholderGame\\core\\assets\\Tiles for testing\\Map1.tmx");
 		collisionLayer = (TiledMapTileLayer)map.getLayers().get("Walls");
 		if (givenType == playerType.Nerd) {
 			//update the image for it
@@ -162,9 +158,9 @@ public class Player extends Unit {
 			maxHealth = 3;
 			currentHealth = maxHealth;
 			stealth = 3;
-			speed = 1; //change after testing
-			sprintSpeed = 20; ///change after testing
-			stamina = 500; //change after testing
+			speed = 3; //change after testing
+			sprintSpeed = 5; ///change after testing
+			stamina = 30; //change after testing
 			maxStamina = stamina;
 			setXY(new Vector2(0, 0)); //set to where the start of the layer is
 		} else if (givenType == playerType.Jock) {
