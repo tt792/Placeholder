@@ -48,17 +48,17 @@ public class Placeholder extends ApplicationAdapter {
 	Sprite enemy;
 	Vector2 enemyXY = new Vector2(0,0);
 	Sprite test;
+	
+	private boolean playerCreated = false;
 	//end of temp stuff
 	
 	@Override
 	public void create () {
-		UI.create(); //creates the ui? ask matt
+		UI.create(); //Creates the UI
 		//set up font for things
 		font = new BitmapFont();
 		
 		batch = new SpriteBatch();
-		player = new Player(Player.playerType.Nerd); //change depending on which button the player presses
-		
 		/*
 		 * Load and create the tiled map for the player to move around on
 		 */
@@ -90,6 +90,11 @@ public class Placeholder extends ApplicationAdapter {
 		
 		//Only move and render game if out of menu
 		if (!UI.inMenu) {
+			if(!playerCreated) { //Creates the player once the type has been picked in the menu
+				player = new Player(UI.desiredType);
+				playerCreated = true;
+			}
+			
 			player.move();
 			updateCam();
 			tiledMapRenderer.setView(camera); //set it so that the map is aligned to the camera

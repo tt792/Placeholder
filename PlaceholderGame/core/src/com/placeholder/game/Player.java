@@ -160,12 +160,12 @@ public class Player extends Unit {
 		} else if (givenType == playerType.Jock) {
 			//update the image for it
 			addItemToInventory(new Pickup("Fists", itemType.Weapon, "Your strong fists allow you to easily get through these enemies", 3, "Sword.png"));
-			maxHealth = 4;
+			maxHealth = 5;
 			currentHealth = maxHealth;
 			stealth = 0;
-			speed = 5;
-			sprintSpeed = 7;
-			stamina = 40;
+			speed = 2;
+			sprintSpeed = 4;
+			stamina = 50;
 			maxStamina = stamina;
 		} else if (givenType == playerType.Art) { //TODO: the third class in the game
 			addItemToInventory(new Pickup("Medicinal Herbs", itemType.HealthItem,"Feels good man...", 0, "Medkit.png"));
