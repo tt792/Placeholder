@@ -1,6 +1,5 @@
 package com.placeholder.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -86,6 +85,6 @@ public class Pickup {
 		type = givenType;
 		description = givenDescription;
 		effect = givenEffect;
-		sprite = new Sprite(new Texture(Gdx.files.internal(givenFileName)));
+		sprite = new Sprite(new Texture(givenFileName));
 	}
 }

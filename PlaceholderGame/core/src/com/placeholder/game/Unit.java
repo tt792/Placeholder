@@ -82,6 +82,10 @@ public class Unit {
 	 */
 	public int currentHealth;
 	
+	public int getHealth() {
+		return currentHealth;
+	}
+	
 	/**
 	 * The agility of this Unit
 	 * @description The speed the unit can move around the map

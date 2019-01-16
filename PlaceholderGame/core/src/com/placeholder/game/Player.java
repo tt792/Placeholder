@@ -31,6 +31,11 @@ public class Player extends Unit {
 	private TiledMap map;
 	
 	/**
+	 * List of pickups to be rendered
+	 */
+	public Pickup[] pickupList = new Pickup[0];
+	
+	/**
 	 * The layer of the map which contains the walls which the player cannot walk over
 	 */
 	TiledMapTileLayer collisionLayer; //only selects the layer called "Walls"
@@ -115,27 +120,16 @@ public class Player extends Unit {
 	 * 		either puts the item into the inventory or will switch out the players current item in that slot
 	 * 		Do we want this to return the old item so it can be dropped?
 	 */
-	Pickup addItemToInventory(String givenName, itemType givenType, String givenDescription, int givenEffect, String givenFileName) {
+	Pickup addItemToInventory(Pickup item) {
 		Pickup tempPickup = null;
-		if (givenType == itemType.Weapon) {
+		if (item.getType() == itemType.Weapon) {
 			tempPickup = inventory[0];
-			//call dropItem function
-			inventory[0] = new Pickup(givenName, givenType, givenDescription, givenEffect, givenFileName);
-		} else if (givenType == itemType.HealthItem) {
-			tempPickup = inventory[0];
-			//call dropItem function
-			inventory[1] = new Pickup(givenName, givenType, givenDescription, givenEffect, givenFileName);
-		} 
-		return tempPickup;
-	}
-	
-	/**
-	 * dropItem function
-	 *	@Description
-	 *		returns the sprite to be dropped and the location to drop it from the players X and Y
-	 */
-	public void dropItem() {
-		//TODO: implement above
+			inventory[0] = item;
+		} else if (item.getType() == itemType.HealthItem) {
+			tempPickup = inventory[1];
+			inventory[1] = item;
+		}
+		return tempPickup; //passing the old item back to be dropped in the world				
 	}
 	
 	/**
@@ -146,15 +140,15 @@ public class Player extends Unit {
 	 * 		Use other constructor for loading a player into the game
 	 */
 	public Player(playerType givenType) {
-		sprite = new Sprite(new Texture(Gdx.files.internal("testPlayer.png")));
-		addItemToInventory("None", itemType.HealthItem,"You have no health item", 0, "HealthPack.png");
+		sprite = new Sprite(new Texture("testPlayer.png"));
+		addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "Medkit.png"));
 		type = Nature.Player;
 		playerClass = givenType;
-		map = new TmxMapLoader().load("C:\\Users\\TGWTu\\Documents\\Placeholder-master\\Placeholder-master\\PlaceholderGame\\core\\assets\\Tiles for testing\\Map1.tmx");
+		map = new TmxMapLoader().load("Map1.tmx");
 		collisionLayer = (TiledMapTileLayer)map.getLayers().get("Walls");
 		if (givenType == playerType.Nerd) {
 			//update the image for it
-			addItemToInventory("Wimpy Fists", itemType.Weapon, "Your wimpy nerd fists aernt going to do anything against these zombies", 1, "Sword.png");
+			addItemToInventory(new Pickup("Wimpy Fists", itemType.Weapon, "Your wimpy nerd fists aernt going to do anything against these zombies", 1, "Sword.png"));
 			maxHealth = 3;
 			currentHealth = maxHealth;
 			stealth = 3;
@@ -165,7 +159,7 @@ public class Player extends Unit {
 			setXY(new Vector2(0, 0)); //set to where the start of the layer is
 		} else if (givenType == playerType.Jock) {
 			//update the image for it
-			addItemToInventory("Fists", itemType.Weapon, "Your strong fists allow you to easily get through these enemies", 3, "Sword.png");
+			addItemToInventory(new Pickup("Fists", itemType.Weapon, "Your strong fists allow you to easily get through these enemies", 3, "Sword.png"));
 			maxHealth = 4;
 			currentHealth = maxHealth;
 			stealth = 0;
@@ -174,9 +168,12 @@ public class Player extends Unit {
 			stamina = 40;
 			maxStamina = stamina;
 		} else if (givenType == playerType.Art) { //TODO: the third class in the game
-			addItemToInventory("Medicinal Herbs", itemType.HealthItem,"Feels good man...", 0, "HealthPack.png");
+			addItemToInventory(new Pickup("Medicinal Herbs", itemType.HealthItem,"Feels good man...", 0, "Medkit.png"));
 			//peeeeeeeeta hide yourself by drawing rocks....
 		}
+		addPickupToRender(new Pickup("MedKit", itemType.HealthItem, "This will heal you 1", 5, "Medkit.png"), 16, 50);
+		addPickupToRender(new Pickup("MedKit2", itemType.HealthItem, "This will heal you 2", 5, "Medkit.png"), 64, 50);
+		addPickupToRender(new Pickup("MedKit3", itemType.HealthItem, "This will heal you 3", 5, "Medkit.png"), 16, 70);
 	}
 	
 	/**
@@ -193,8 +190,8 @@ public class Player extends Unit {
 		 * ie. if the players a Nerd they have x health, y speed and u 
 		 */
 		sprite = new Sprite(new Texture(Gdx.files.internal("Player.png")));
-		addItemToInventory("Fists", itemType.Weapon, "These are your fists, time to go hit some zombies", 1, "Sword.png");
-		addItemToInventory("None", itemType.HealthItem,"You have no health item", 0, "HealthPack.png");
+		addItemToInventory(new Pickup("Fists", itemType.Weapon, "These are your fists, time to go hit some zombies", 1, "Sword.png"));
+		addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "HealthPack.png"));
 		type = Nature.Player;
 		maxHealth = givenMaxHealth;
 		speed = givenSpeed;
@@ -210,7 +207,7 @@ public class Player extends Unit {
 	 * Returns the Pickup from slot [num] in the inventory
 	 * num <== {0, 1}
 	 */
-	Pickup viewInventory(int num) {
+	public Pickup viewInventory(int num) {
 		if ((num != 0) && (num != 1)){
 			return null;
 		}
@@ -280,16 +277,76 @@ public class Player extends Unit {
 				}
 			}
 		}
-		sprite.setPosition(xy.x, xy.y);
+		//button to use a med item
+		if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+			useHealthItem();
+		}
 		
-		//do some collision checking here
-		/*
-		 * before move player
-		 * check the tile that is next to the player in that direction
-		 * ie. if "W" is pressed then check the tile which is to the right by ~10px
-		 * if that tile has the "Wall" property then dont allow the movement
-		 * so will need to get the tilemaps here
-		 */
+		//test for collision with an item to then pickup that item
+		itemCollision();
+		sprite.setPosition(xy.x, xy.y);
+	}
+	
+	/**
+	 * Function to test if the player is touching a pickup
+	 */
+	private void itemCollision() {
+		for (int i = 0; i < pickupList.length; i++) {
+			if (pickupList[i] != null) {
+				if (this.sprite.getBoundingRectangle().overlaps(pickupList[i].sprite.getBoundingRectangle())) { //doesnt work sometimes for some reason
+					pickupItem(pickupList[i]);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Function to add item to inventory,
+	 * removes the old item from the inventory
+	 */
+	private void pickupItem(Pickup item) {
+		System.out.println(inventory[1].getName());
+		System.out.println(inventory.length);
+		removePickupToRender(item); //stop displaying the item thats been picked up
+		addPickupToRender(addItemToInventory(item), getX(), getY()); //add that item to the inventory and draw what used to be in the inventory
+		System.out.println(inventory[1].getName());
+	}
+	
+	/**
+	 * Function to add a pickup to be rendered
+	 */
+	private void addPickupToRender(Pickup item, float givenX, float givenY) {
+		if (item.getName() != "None") {
+			Pickup tempPickup[] = new Pickup[pickupList.length + 1];
+			for (int i = 0; i < pickupList.length; i++) {
+				tempPickup[i] = pickupList[i];
+			}
+			tempPickup[tempPickup.length - 1] = item;
+			tempPickup[tempPickup.length - 1].sprite.setPosition(givenX, givenY + 64);
+			pickupList = tempPickup;
+		}
+	}
+	
+	/**
+	 * Function to remove a pickup to be rendered
+	 * ie. when the player picks up an item
+	 */
+	private void removePickupToRender(Pickup item) {
+		int num = 0;
+		Pickup tempPickup[] = new Pickup[pickupList.length - 1];
+		for (int i = 0; i < pickupList.length; i++) {
+			if (pickupList[i] == item) {
+				num = i;
+				break;
+			}
+		}
+		for (int i = 0; i < num; i++) {
+			tempPickup[i] = pickupList[i];
+		}
+		for (int i = num + 1; i < tempPickup.length; i++) {
+			tempPickup[i] = pickupList[i+1];
+		}
+		pickupList = tempPickup;
 	}
 	
 	/**
@@ -299,7 +356,7 @@ public class Player extends Unit {
 	 * 			- UP / RIGHT / DOWN / LEFT
 	 * @return Boolean value regarding if the player can move there or not
 	 */
-	private boolean testForCollision(String direction) {		
+	private boolean testForCollision(String direction) { //can use this for zombie movement
 		int x1 = 0, y1 = 0, x2 = 0, y2 = 0, offset = 5;
 		//currently only testing the middle of the side player is moving in
 		//later change to be testing multiple points
@@ -397,7 +454,7 @@ public class Player extends Unit {
 			} else {
 				currentHealth = maxHealth;
 			}
-			addItemToInventory("None", itemType.HealthItem,"You have no health item", 0, "HealthPack.png");
+			addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "Medkit.png"));
 		}
 	}
 } 
