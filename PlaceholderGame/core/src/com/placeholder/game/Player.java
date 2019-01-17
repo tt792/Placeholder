@@ -160,6 +160,7 @@ public class Player extends Unit {
 	 * @Description
 	 * 		Takes the player type and builds the player around that, is for creating a new player at the beginning of the game </br>
 	 * 		Use other constructor for loading a player into the game
+	 * @implementation (F10) Used to create the player class as selected from the menu system
 	 */
 	public Player(playerType givenType) {
 		itemList[0] = new Pickup("Sneakers", itemType.Sneakers, "These help you sneak", 5, "Speedup.png", new Vector2(16, 90), 0); //add the 3 powerups
@@ -201,6 +202,7 @@ public class Player extends Unit {
 	
 	/**
 	 * Function to change the pickups and and map for player collisions
+	 * @implementation (F1) Used to update the players map for wall collisions
 	 */
 	public void updateLevel(int currentLevel) {
 		map = new TmxMapLoader().load(Placeholder.levelList[currentLevel]);
@@ -328,6 +330,7 @@ public class Player extends Unit {
 	
 	/**
 	 * Function to test if the player is touching a pickup
+	 * @implementation (F15) Used to detect and act when the player picks up an item
 	 */
 	private void itemCollision() {
 		for (int i = 0; i < pickupList.length; i++) {
@@ -354,6 +357,7 @@ public class Player extends Unit {
 	/**
 	 * Function to add item to inventory,
 	 * removes the old item from the inventory
+	 * @implementation (F15) Used to act when the player picks up a Weapon or HealthItem
 	 */
 	private void pickupItem(Pickup item) {
 		removePickupToRender(item); //stop displaying the item thats been picked up
@@ -363,6 +367,7 @@ public class Player extends Unit {
 	
 	/**
 	 * Function to note that the player has picked up a powerup
+	 * @implementation (F15) Used to act when the player picks up a Power Up
 	 */
 	private void addPowerup(Pickup item) {
 		/*
@@ -383,6 +388,7 @@ public class Player extends Unit {
 	
 	/**
 	 * Function to add a pickup to be rendered
+	 * @implementation (F15) Used to ensure a dropped item is rendered
 	 */
 	private void addPickupToRender(Pickup item) {
 		if (item.getName() != "None") {
@@ -399,6 +405,7 @@ public class Player extends Unit {
 	/**
 	 * Function to remove a pickup from being rendered
 	 * 	 * ie. when the player picks up an item
+	 * @implementation (F15) Used to ensure a picked up item is no longer rendered
 	 */
 	private void removePickupToRender(Pickup item) { //stop rendering the item the player touched or if switching level
 		int num = -1; //cannot be -1 after this loop, to make sure the item passed is in the list
@@ -530,6 +537,7 @@ public class Player extends Unit {
 	
 	/**
 	 * Changes the players health depending on the healthItem pickup in the players inventory
+	 * @implementation (F15) Used to act when a HealthItem is used
 	 */
 	void useHealthItem() {
 		if (inventory[1].getName() != "None") { //if the name is None then the player has no health item

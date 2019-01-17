@@ -92,11 +92,11 @@ public class UI {
 		menuPosition = 0;
 	}
 	
-	static void chooseNerd() { //Set desired character to nerd
+	static void chooseNerd() { //Set desired character to Nerd
 		desiredType = playerType.Nerd;
 	}
 	
-	static void chooseJock() { //Set desired character to art
+	static void chooseJock() { //Set desired character to Jock
 		desiredType = playerType.Jock;
 	}
 	
@@ -112,6 +112,7 @@ public class UI {
 		title = new Label("Generic: Zombie Game", skin);
 		
 		logo = new Image(new Texture("logo.png"));
+		logo.scaleBy(4);
 		
 		start = new TextButton("Start", skin);
 		start.addListener(new ClickListener() { 
@@ -170,6 +171,11 @@ public class UI {
 		stage.addActor(table);
 	}
 	
+	/**
+	 * Render function for the UI </br>
+	 * displays the buttons and art for character selection and to start the game
+	 * @implementation (F10) Used to display the buttons to select which character the user wishes to play
+	 */
 	public static void render() {
 		if (inMenu) {
 			if(menuPosition == 1) {

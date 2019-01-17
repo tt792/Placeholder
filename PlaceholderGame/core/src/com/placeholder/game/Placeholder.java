@@ -119,6 +119,7 @@ public class Placeholder extends ApplicationAdapter {
 	
 	/**
 	 * Function to test for the end of the game
+	 * @implementation (F16) Used to test whether the player has won the game
 	 */
 	private boolean endGame() {
 		boolean done = true;
@@ -132,6 +133,7 @@ public class Placeholder extends ApplicationAdapter {
 	
 	/**
 	 * Tests for the need to change the level when the player is in the correct area
+	 * @implementation (F1) Used to change between the different areas in the game
 	 */
 	private void changeLevel() {
 		//if the player is in a doorway of a level then need to change the level
@@ -158,7 +160,8 @@ public class Placeholder extends ApplicationAdapter {
 	}
 	
 	/**
-	 * Updates the drawn level
+	 * Updates the variables for the drawn map
+	 * @implementation (F1) Used to update the tiledMap and tiledMapRenderer when the area changes
 	 */
 	private void updateLevel() {
 		tiledMap = new TmxMapLoader().load(levelList[currentLevel]);
