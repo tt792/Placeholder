@@ -180,7 +180,7 @@ public class UI {
 				}
 				else if (desiredType == playerType.Jock) {
 					currText.setText("The Jock");
-					currChar.setDrawable(new SpriteDrawable(new Sprite(new Texture("Sword.png"))));
+					currChar.setDrawable(new SpriteDrawable(new Sprite(new Texture("player2_updown.png"))));
 					currStats.setText("Stats:\nStrength: 3\nSpeed: 2\nHP: 5\nStealth: 0");
 				}
 			}

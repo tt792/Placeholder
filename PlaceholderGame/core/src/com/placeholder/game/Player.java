@@ -165,7 +165,6 @@ public class Player extends Unit {
 		itemList[0] = new Pickup("Sneakers", itemType.Sneakers, "These help you sneak", 5, "Speedup.png", new Vector2(16, 90), 0); //add the 3 powerups
 		itemList[1] = new Pickup("MedKit", itemType.HealthItem, "This will heal you 3", 5, "Medkit1.png", new Vector2(16, 70), 0);
 		itemList[2] = new Pickup("Speedos", itemType.Speedos, "You feel streamlined", 5, "Speedos.png", new Vector2(70,50), 1);
-		sprite = new Sprite(new Texture("player1_updown.png"));
 		addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "Medkit1.png", new Vector2(0,0), 0)); //give the player no health item to begin with
 		type = Nature.Player;
 		playerClass = givenType;
@@ -173,6 +172,7 @@ public class Player extends Unit {
 		setXY(new Vector2(0, 0)); //set to where the start of the player is
 		if (givenType == playerType.Nerd) {
 			//update the image for it
+			sprite = new Sprite(new Texture("player1_updown.png"));
 			addItemToInventory(new Pickup("Wimpy Fists", itemType.Weapon, "Your wimpy nerd fists aernt going to do anything against these zombies", 1, "Sword.png", new Vector2(0,0), 0));
 			maxHealth = 3;
 			currentHealth = maxHealth;
@@ -183,6 +183,7 @@ public class Player extends Unit {
 			maxStamina = stamina;
 		} else if (givenType == playerType.Jock) {
 			//update the image for it
+			sprite = new Sprite(new Texture("player2_updown.png"));
 			addItemToInventory(new Pickup("Fists", itemType.Weapon, "Your strong fists allow you to easily get through these enemies", 3, "Sword.png", new Vector2(0,0), 0));
 			maxHealth = 5;
 			currentHealth = maxHealth;

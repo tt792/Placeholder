@@ -114,9 +114,6 @@ public class Placeholder extends ApplicationAdapter {
 			player.sprite.draw(batch);
 			batch.end();
 			changeLevel(); //test if the player needs to change level
-			if (endGame()) {
-				System.out.println("Won Game");
-			}
 		}
 	}
 	
@@ -217,6 +214,11 @@ public class Placeholder extends ApplicationAdapter {
 			} else if (player.getPickupsCollected()[i] == false) {
 				font.draw(batch, "INCOMPLETE", left + 180, top - 145 - (20 * i));			
 			}
+		}
+		
+		//draw player won game or not
+		if (endGame()) {
+			font.draw(batch, "YOU WIN!!!", left, top - 200);
 		}
 	}
 
