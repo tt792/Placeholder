@@ -17,6 +17,7 @@ public class UI {
 	
 	//Main Menu Widgets
 	static Label title;
+	static Image logo;
 	static TextButton start;
 	static TextButton quit;
 	
@@ -45,7 +46,8 @@ public class UI {
 		selectDrawn = false;
 		
 		//Add all of the widgets onto the table
-		table.add(title).height(100);
+		//table.add(title).height(100);
+		table.add(logo);
 		table.row();
 		table.add(start).padBottom(20).height(30).width(100);
 		table.row();
@@ -108,6 +110,8 @@ public class UI {
 		table = new Table();
 		
 		title = new Label("Generic: Zombie Game", skin);
+		
+		logo = new Image(new Texture("logo.png"));
 		
 		start = new TextButton("Start", skin);
 		start.addListener(new ClickListener() { 

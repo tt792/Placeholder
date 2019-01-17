@@ -74,7 +74,7 @@ public class Player extends Unit {
 	/**
 	 * The stamina of the player, defining how far they can run
 	 */
-	private int stamina, maxStamina, staminaRegenDelay = 2000;
+	private int stamina, maxStamina, staminaRegenDelay = 2;
 	
 	/**
 	 * The last time the player sprinted
@@ -447,10 +447,21 @@ public class Player extends Unit {
 	 * Function to increase the stamina of the player if they are not currently running+
 	 */
 	private void updateStamina() {
-		if (sprintHeld())
-			lastSprintTime = System.currentTimeMillis();
-		if (stamina < maxStamina && !sprintHeld() && (System.currentTimeMillis() >= (lastSprintTime + (float)staminaRegenDelay))) {
-			stamina += 1;
+//		if (sprintHeld())
+//			lastSprintTime = System.currentTimeMillis();
+//		if (stamina < maxStamina && !sprintHeld()) {
+//			if (System.currentTimeMillis() > (lastSprintTime + staminaRegenDelay))
+//				stamina += 1;
+//		}
+		if (sprintHeld()) {
+			staminaRegenDelay = 100;
+		}
+		if (staminaRegenDelay > 0) {
+			staminaRegenDelay -= Gdx.graphics.getDeltaTime();
+		} else {
+			if (stamina < maxStamina) {
+				stamina += 1;
+			}
 		}
 	}
 	
