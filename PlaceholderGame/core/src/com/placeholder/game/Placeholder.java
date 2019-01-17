@@ -93,9 +93,6 @@ public class Placeholder extends ApplicationAdapter {
 				player = new Player(UI.desiredType);
 				playerCreated = true;
 			}
-			if (player.getClass() ==  null) {
-				System.out.println("Not Good");
-			}
 			
 			player.move();
 			updateCam();
@@ -117,7 +114,23 @@ public class Placeholder extends ApplicationAdapter {
 			player.sprite.draw(batch);
 			batch.end();
 			changeLevel(); //test if the player needs to change level
+			if (endGame()) {
+				System.out.println("Won Game");
+			}
 		}
+	}
+	
+	/**
+	 * Function to test for the end of the game
+	 */
+	private boolean endGame() {
+		boolean done = true;
+		for (int i = 0; i < player.getPickupsCollected().length; i++) {
+			if (player.getPickupsCollected()[i] == false) {
+				done = false;
+			}
+		}
+		return done;
 	}
 	
 	/**
@@ -132,6 +145,15 @@ public class Placeholder extends ApplicationAdapter {
 					currentLevel = 1;
 				}
 				player.setXY(new Vector2(5 * 32, 5 * 32));
+				player.updateLevel(currentLevel);
+				updateLevel();
+			}
+		} else if(currentLevel == 1) {
+			if ((int) (player.getX() / 32) == 1 && (int) (Math.round(player.getY()) / 32) == 1) {
+				if (levelList[currentLevel] == "Map2.tmx") { //if in the first map TODO change this to be the name of each level
+					currentLevel = 0;
+				}
+				player.setXY(new Vector2(0 * 32, 0 * 32));
 				player.updateLevel(currentLevel);
 				updateLevel();
 			}
@@ -179,6 +201,22 @@ public class Placeholder extends ApplicationAdapter {
 		font.draw(batch, "Stamina: ", left, bottom + 30);
 		for (int i = 0; i < player.getStamina(); i++) {
 			font.draw(batch, "-", left + (10 * i), bottom + 15);
+		}
+		
+		//draw player quest status
+		font.draw(batch, "Objectives: ", left, top - 115);
+		font.draw(batch, "Find all the powerups!", left, top - 130);
+		for (int i = 0; i < player.getPickupsCollected().length; i++) {
+			if (i == 0) {
+				font.draw(batch, "Sneakers Collected: ", left, top - 145 - (20 * i));
+			} else if (i == 1) {
+				font.draw(batch, "Speedos Collected: ", left, top - 145 - (20 * i));
+			}
+			if (player.getPickupsCollected()[i] == true) {
+				font.draw(batch, "DONE", left + 180, top - 145 - (20 * i));
+			} else if (player.getPickupsCollected()[i] == false) {
+				font.draw(batch, "INCOMPLETE", left + 180, top - 145 - (20 * i));			
+			}
 		}
 	}
 
