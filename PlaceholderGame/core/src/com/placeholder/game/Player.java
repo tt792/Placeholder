@@ -166,7 +166,7 @@ public class Player extends Unit {
 		itemList[1] = new Pickup("MedKit", itemType.HealthItem, "This will heal you 3", 5, "Medkit1.png", new Vector2(16, 70), 0);
 		itemList[2] = new Pickup("Speedos", itemType.Speedos, "You feel streamlined", 5, "Speedos.png", new Vector2(70,50), 1);
 		addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "Medkit1.png", new Vector2(0,0), 0)); //give the player no health item to begin with
-		type = Nature.Player;
+		type = nature.Player;
 		playerClass = givenType;
 		updateLevel(Placeholder.currentLevel); //give the player the level walls for collisions
 		setXY(new Vector2(0, 0)); //set to where the start of the player is
@@ -235,7 +235,7 @@ public class Player extends Unit {
 		sprite = new Sprite(new Texture("testPlayer.png"));
 		addItemToInventory(new Pickup("Fists", itemType.Weapon, "These are your fists, time to go hit some zombies", 1, "Sword.png", new Vector2(0,0), 0));
 		addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "HealthPack.png", new Vector2(0,0), 0));
-		type = Nature.Player;
+		type = nature.Player;
 		maxHealth = givenMaxHealth;
 		speed = givenSpeed;
 		stamina = givenStamina;

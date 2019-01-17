@@ -61,14 +61,14 @@ public class Unit {
 	/**
 	 * Weather this unit is a Zombie or a Player
 	 */
-	public enum Nature{
+	public enum nature{
 		Zombie, Player;
 	}
 	
 	/**
 	 * The public reference to the type of this unit
 	 */
-	public Nature type;
+	public nature type;
 	
 	/**
 	 * The maximum health of this Unit
