@@ -1,11 +1,8 @@
 package com.placeholder.game;
 
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.placeholder.game.Player.playerType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

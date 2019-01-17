@@ -146,10 +146,11 @@ public class Player extends Unit {
 	 */
 	public Player(playerType givenType) {
 		sprite = new Sprite(new Texture("testPlayer.png"));
-		addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "Medkit1.png"));
+		addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "Medkit1.png")); //give the player no health item to begin with
 		type = Nature.Player;
 		playerClass = givenType;
-		updateLevel(Placeholder.currentLevel);
+		updateLevel(Placeholder.currentLevel); //give the player the level walls for collisions
+		setXY(new Vector2(0, 0)); //set to where the start of the player is
 		if (givenType == playerType.Nerd) {
 			//update the image for it
 			addItemToInventory(new Pickup("Wimpy Fists", itemType.Weapon, "Your wimpy nerd fists aernt going to do anything against these zombies", 1, "Sword.png"));
@@ -160,7 +161,6 @@ public class Player extends Unit {
 			sprintSpeed = 5;
 			stamina = 30;
 			maxStamina = stamina;
-			setXY(new Vector2(0, 0)); //set to where the start of the layer is
 		} else if (givenType == playerType.Jock) {
 			//update the image for it
 			addItemToInventory(new Pickup("Fists", itemType.Weapon, "Your strong fists allow you to easily get through these enemies", 3, "Sword.png"));
@@ -183,19 +183,6 @@ public class Player extends Unit {
 	public void updateLevel(int currentLevel) {
 		map = new TmxMapLoader().load(Placeholder.levelList[currentLevel]);
 		collisionLayer = (TiledMapTileLayer)map.getLayers().get("Walls");
-		for (int y = 0; y < 10; y++) {
-			for (int x = 0; x < 10; x++) {
-				if (collisionLayer.getCell(x, y) == null) {
-					System.out.print("0");
-				} else {
-					System.out.print(collisionLayer.getCell(x,y).getTile().toString());
-				}
-			}
-			System.out.println();
-		}
-		if (collisionLayer.getCell(0, 0) == null) {
-			System.out.println("some string");
-		}
 	}
 	
 	/**
@@ -211,7 +198,7 @@ public class Player extends Unit {
 		 * can get the max health, stealth, speed from what type the player is
 		 * ie. if the players a Nerd they have x health, y speed and u 
 		 */
-		sprite = new Sprite(new Texture("Player.png"));
+		sprite = new Sprite(new Texture("testPlayer.png"));
 		addItemToInventory(new Pickup("Fists", itemType.Weapon, "These are your fists, time to go hit some zombies", 1, "Sword.png"));
 		addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "HealthPack.png"));
 		type = Nature.Player;

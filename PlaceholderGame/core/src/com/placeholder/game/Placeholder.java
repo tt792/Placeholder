@@ -93,6 +93,9 @@ public class Placeholder extends ApplicationAdapter {
 				player = new Player(UI.desiredType);
 				playerCreated = true;
 			}
+			if (player.getClass() ==  null) {
+				System.out.println("Not Good");
+			}
 			
 			player.move();
 			updateCam();
