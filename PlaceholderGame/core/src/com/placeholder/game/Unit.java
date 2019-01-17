@@ -93,6 +93,20 @@ public class Unit {
 	public int speed;
 	
 	/**
+	 * Function to return the value of the players speed
+	 */
+	public int getSpeed() {
+		return speed;
+	}
+	
+	/**
+	 * Function to change the speed of the player
+	 */
+	public void changeSpeed(int givenSpeed) {
+		speed += givenSpeed;
+	}
+	
+	/**
 	 * The speed of this unit when sprinting
 	 */
 	public int sprintSpeed;

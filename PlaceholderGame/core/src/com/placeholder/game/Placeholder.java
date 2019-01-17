@@ -41,6 +41,8 @@ public class Placeholder extends ApplicationAdapter {
 	Player player;
 	private float camX = 0, camY = 0;
 	private Vector2 playerDiff = new Vector2(0f, 0f);
+	public static String[] levelList = new String[2]; //stores the level names from file storage
+	public static int currentLevel = 0; //number reference to the level number for levelList
 	
 	
 	//to be replaced when enemy has sprite
@@ -55,6 +57,9 @@ public class Placeholder extends ApplicationAdapter {
 		UI.create(); //creates the ui? ask matt
 		//set up font for things
 		font = new BitmapFont();
+		//list of names of maps
+		levelList[0] = "Map1.tmx";
+		levelList[1] = "Map2.tmx";
 		
 		batch = new SpriteBatch();
 		player = new Player(Player.playerType.Nerd); //change depending on which button the player presses
@@ -62,18 +67,12 @@ public class Placeholder extends ApplicationAdapter {
 		/*
 		 * Load and create the tiled map for the player to move around on
 		 */
-		tiledMap = new TmxMapLoader().load("Map1.tmx");
+		tiledMap = new TmxMapLoader().load(levelList[currentLevel]);
 	    tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 		/*
 		 * TODO:
 		 * Change the enemy creation and such so its not done here
 		 */
-	    /* add in when dealing with the enemy
-		enemy = new Sprite(new Texture(Gdx.files.internal("enemy.jpg")));
-		enemyXY.x += enemy.getWidth() / 2;
-		enemyXY.y += enemy.getHeight() / 2;
-		enemy.setScale(0.2f);
-		*/
 		
 		//create camera for scene
 		camera = new OrthographicCamera();
@@ -109,19 +108,45 @@ public class Placeholder extends ApplicationAdapter {
 			playerUI(batch); //draw the players UI (health etc...)
 			player.sprite.draw(batch);
 			batch.end();
+			changeLevel(); //test if the player needs to change level
 		}
 	}
 	
-
+	/**
+	 * Tests for the need to change the level when the player is in the correct area
+	 */
+	private void changeLevel() {
+		//if the player is in a doorway of a level then need to change the level
+		if (currentLevel == 0) {
+			if ((int) (player.getX() / 32) == 1 && (int) (Math.round(player.getY()) / 32) == 1) { //if the player is in the position
+				//currently hardcoded, should change this to be in an array or so at some point
+				if (levelList[currentLevel] == "Map1.tmx") { //if in the first map TODO change this to be the name of each level
+					currentLevel = 1;
+				}
+				player.setXY(new Vector2(5 * 32, 5 * 32));
+				player.updateLevel(currentLevel);
+				updateLevel();
+			}
+		}
+	}
+	
+	/**
+	 * Updates the drawn level
+	 */
+	private void updateLevel() {
+		tiledMap = new TmxMapLoader().load(levelList[currentLevel]);
+	    tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+	}
 
 	
 	/**
 	 * Function to display the player stats on screen
 	 */
 	public void playerUI(SpriteBatch batch) {
-		float top, left;
-		top = camY + (Gdx.graphics.getHeight() / 2);
-		left = camX - (Gdx.graphics.getWidth() / 2);
+		float top, left, bottom;
+		top = camY + (Gdx.graphics.getHeight() / 2) - 5;
+		left = camX - (Gdx.graphics.getWidth() / 2) + 5;
+		bottom = camY - (Gdx.graphics.getHeight() / 2) + 5;
 		
 		//display player health
 		font.draw(batch, "Health: " , left, top);	
@@ -135,9 +160,18 @@ public class Placeholder extends ApplicationAdapter {
 		font.draw(batch, "Health Item: " + player.viewInventory(1).getName(), left, top - 80);
 		
 		//draw player stats
-		font.draw(batch, "Stealth: ", left, top - 105);
-		font.draw(batch, "Speed: ", left, top - 130);
-		font.draw(batch, "Stamina: ", left, top - 155);
+		font.draw(batch, "Stealth: ", left, bottom + 90);
+		for (int i = 0; i < player.getStealth(); i++) {
+			font.draw(batch, "-", left + (10 * i), bottom + 75);
+		}
+		font.draw(batch, "Speed: ", left, bottom + 60);
+		for (int i = 0; i < player.getSpeed(); i++) {
+			font.draw(batch, "-", left + (10 * i), bottom + 45);
+		}
+		font.draw(batch, "Stamina: ", left, bottom + 30);
+		for (int i = 0; i < player.getStamina(); i++) {
+			font.draw(batch, "-", left + (10 * i), bottom + 15);
+		}
 	}
 
 	/**
