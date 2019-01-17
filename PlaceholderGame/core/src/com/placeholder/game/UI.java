@@ -43,8 +43,8 @@ public class UI {
 	static Player.playerType desiredType = playerType.Nerd;
 
 	static void drawMainMenu() {
-		table.center();
 		table.clear();
+		table.center();
 		selectDrawn = false;
 		
 		table.add(title).height(100);
@@ -192,7 +192,7 @@ public class UI {
 			stage.act(Gdx.graphics.getDeltaTime());
 			stage.draw();
 		}
-		if (!inMenu) {
+		if (!inMenu) { //If we are no longer in the menu (i.e. we have started the game)
 			table.clear();
 			menuPosition = 0;
 			mainDrawn = false;

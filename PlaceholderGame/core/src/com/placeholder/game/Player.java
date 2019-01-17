@@ -182,8 +182,20 @@ public class Player extends Unit {
 	
 	public void updateLevel(int currentLevel) {
 		map = new TmxMapLoader().load(Placeholder.levelList[currentLevel]);
-		collisionLayer = null;
 		collisionLayer = (TiledMapTileLayer)map.getLayers().get("Walls");
+		for (int y = 0; y < 10; y++) {
+			for (int x = 0; x < 10; x++) {
+				if (collisionLayer.getCell(x, y) == null) {
+					System.out.print("0");
+				} else {
+					System.out.print(collisionLayer.getCell(x,y).getTile().toString());
+				}
+			}
+			System.out.println();
+		}
+		if (collisionLayer.getCell(0, 0) == null) {
+			System.out.println("some string");
+		}
 	}
 	
 	/**
