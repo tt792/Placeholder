@@ -74,7 +74,12 @@ public class Player extends Unit {
 	/**
 	 * The stamina of the player, defining how far they can run
 	 */
-	private int stamina, maxStamina;
+	private int stamina, maxStamina, staminaRegenDelay = 2000;
+	
+	/**
+	 * The last time the player sprinted
+	 */
+	private float lastSprintTime;
 	
 	/**
 	 * Function to return the value of the players stamina
@@ -145,7 +150,7 @@ public class Player extends Unit {
 	 * 		Use other constructor for loading a player into the game
 	 */
 	public Player(playerType givenType) {
-		sprite = new Sprite(new Texture("testPlayer.png"));
+		sprite = new Sprite(new Texture("player1_updown.png"));
 		addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "Medkit1.png")); //give the player no health item to begin with
 		type = Nature.Player;
 		playerClass = givenType;
@@ -442,7 +447,9 @@ public class Player extends Unit {
 	 * Function to increase the stamina of the player if they are not currently running+
 	 */
 	private void updateStamina() {
-		if (stamina < maxStamina && !sprintHeld()) {
+		if (sprintHeld())
+			lastSprintTime = System.currentTimeMillis();
+		if (stamina < maxStamina && !sprintHeld() && (System.currentTimeMillis() >= (lastSprintTime + (float)staminaRegenDelay))) {
 			stamina += 1;
 		}
 	}

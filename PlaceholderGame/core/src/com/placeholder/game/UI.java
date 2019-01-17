@@ -44,9 +44,9 @@ public class UI {
 		table.center();
 		selectDrawn = false;
 		
+		//Add all of the widgets onto the table
 		table.add(title).height(100);
 		table.row();
-
 		table.add(start).padBottom(20).height(30).width(100);
 		table.row();
 		table.add(quit).height(30).width(100);
@@ -60,6 +60,7 @@ public class UI {
 		
 		table.left();
 		
+		//Add all of the widgets onto the table
 		table.add(csTitle);
 		table.row();
 		table.add(currText).padTop(40).padBottom(10).colspan(3);
@@ -170,7 +171,7 @@ public class UI {
 			if(menuPosition == 1) {
 				if(desiredType == playerType.Nerd) {
 					currText.setText("The Nerd");
-					currChar.setDrawable(new SpriteDrawable(new Sprite(new Texture("enemy.jpg"))));
+					currChar.setDrawable(new SpriteDrawable(new Sprite(new Texture("player1_updown.png"))));
 					currStats.setText("Stats:\nStrength: 1\nSpeed: 3\nHP: 3\nStealth: 3");
 				}
 				else if (desiredType == playerType.Jock) {
