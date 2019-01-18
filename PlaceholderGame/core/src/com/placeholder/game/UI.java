@@ -32,7 +32,6 @@ public class UI {
 	static TextButton jock;
 	
 	
-	
 	static int menuPosition = 0; //What page of the menu you are
 	static boolean mainDrawn = false; //Is the main page drawn? 
 	static boolean selectDrawn = false; //Is the character select page drawn?
@@ -40,13 +39,16 @@ public class UI {
 	
 	static Player.playerType desiredType = playerType.Nerd;
 
+	/**
+	 * Draws the main menu screen
+	 * @implementation Add all of the widgets that should be on the main menu screen here
+	 */
 	static void drawMainMenu() {
 		table.clear();
 		table.center();
 		selectDrawn = false;
 		
 		//Add all of the widgets onto the table
-		//table.add(title).height(100);
 		table.add(logo).padBottom(20).height(200).width(200);
 		table.row();
 		table.add(start).padBottom(20).height(30).width(100);
@@ -56,6 +58,10 @@ public class UI {
 		mainDrawn = true;
 	}
 	
+	/**
+	 * Draws the character selection screen
+	 * @implementation Add all of the widgets that should be on the character selection screen here
+	 */
 	static void drawSelect() {
 		table.clear();
 		mainDrawn = false;
@@ -80,35 +86,56 @@ public class UI {
 		selectDrawn = true;
 	}
 	
-	static void startGame() { //Go to the char selection screen
+	/**
+	 * Takes the UI to the Character selection screen
+	 */
+	static void charSelection() {
 		menuPosition = 1;
 	}
 	
-	static void next() { //Start the game after char selection
+	/**
+	 * Start the game after a character has been selected
+	 */
+	static void startGame() {
 		inMenu = false;
 	}
 	
-	static void prev() { //Return to main menu from char selection
+	/**
+	 * Return to main menu from the character selection screen
+	 */
+	static void returnToMain() {
 		menuPosition = 0;
 	}
 	
-	static void chooseNerd() { //Set desired character to Nerd
+	/**
+	 * Sets the players desired character to Nerd
+	 */
+	static void chooseNerd() {
 		desiredType = playerType.Nerd;
 	}
 	
-	static void chooseJock() { //Set desired character to Jock
+	/**
+	 * Sets the players desired character to Jock
+	 */
+	static void chooseJock() {
 		desiredType = playerType.Jock;
 	}
 	
+	/**
+	 * Creation function of the UI. Creates all of the widgets for use in the menus
+	 */
 	public static void create() {
 		//UI Create
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 		
+		//Create the UI skin
 		skin = new Skin(Gdx.files.internal("UI/uiskin.json"));
 		
+		//Create the table
 		table = new Table();
 		
+		//Start creating widgets
 		title = new Label("Generic: Zombie Game", skin);
 		
 		logo = new Image(new Texture("logo.png"));
@@ -116,7 +143,7 @@ public class UI {
 		start = new TextButton("Start", skin);
 		start.addListener(new ClickListener() { 
 			public void clicked(InputEvent event, float x, float y) {
-				startGame();
+				charSelection();
 			}
 		});
 		
@@ -130,14 +157,14 @@ public class UI {
 		nextPage = new TextButton("Start", skin);
 		nextPage.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-				next();
+				startGame();
 			}
 		});
 		
 		prevPage = new TextButton("Return", skin);
 		prevPage.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-				prev();
+				returnToMain();
 			}
 		});
 		
@@ -162,10 +189,11 @@ public class UI {
 				chooseJock();
 			}
 		});
+		//End of creating widgets
 		
 		table.setFillParent(true);
 		
-		drawMainMenu();
+		drawMainMenu(); //Draw the main menu
 		
 		stage.addActor(table);
 	}
@@ -178,15 +206,15 @@ public class UI {
 	public static void render() {
 		if (inMenu) {
 			if(menuPosition == 1) {
-				if(desiredType == playerType.Nerd) {
-					currText.setText("The Nerd");
-					currChar.setDrawable(new SpriteDrawable(new Sprite(new Texture("player1_updown.png"))));
-					currStats.setText("Stats:\nStrength: 1\nSpeed: 3\nHP: 3\nStealth: 3");
+				if(desiredType == playerType.Nerd) { //If the character is supposed to be the nerd
+					currText.setText("The Nerd"); //Change the text to show it is the nerd
+					currChar.setDrawable(new SpriteDrawable(new Sprite(new Texture("player1_updown.png")))); //Change the image to be the nerd
+					currStats.setText("Stats:\nStrength: 1\nSpeed: 3\nHP: 3\nStealth: 3"); //Show the nerds stats TODO not have this hardcoded
 				}
-				else if (desiredType == playerType.Jock) {
-					currText.setText("The Jock");
-					currChar.setDrawable(new SpriteDrawable(new Sprite(new Texture("player2_updown.png"))));
-					currStats.setText("Stats:\nStrength: 3\nSpeed: 2\nHP: 5\nStealth: 0");
+				else if (desiredType == playerType.Jock) { //If the character is supposed to be the jock
+					currText.setText("The Jock"); //Change the text to show it is the jock
+					currChar.setDrawable(new SpriteDrawable(new Sprite(new Texture("player2_updown.png")))); //Change the image to be the jock
+					currStats.setText("Stats:\nStrength: 3\nSpeed: 2\nHP: 5\nStealth: 0"); //Show the jocks stats TODO Not have this hardcoded
 				}
 			}
 			if (menuPosition == 0 && !mainDrawn) { //If we are supposed to be on the main menu and it isn't drawn yet
@@ -207,7 +235,10 @@ public class UI {
 		}
 	}
 	
-	public static void dispose() {
+	/**
+	 * Disposes of the current UI in order to free up memory
+	 */
+	public static void dispose() { 
 		stage.dispose();
 	}
 }

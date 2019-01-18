@@ -57,6 +57,8 @@ public class Placeholder extends ApplicationAdapter {
 	@Override
 	public void create () {
 		UI.create(); //Creates the UI
+		Gdx.graphics.setTitle("Generic: Zombie Game"); //Sets the window title
+		
 		//set up font for things
 		font = new BitmapFont();
 		//list of names of maps
