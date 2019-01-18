@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.2" tiledversion="1.2.1" name="Tileset" tilewidth="32" tileheight="32" tilecount="256" columns="16">
  <image source="Tiles1.png" width="512" height="512"/>
+ <tile id="30">
+  <properties>
+   <property name="Blocked" value=""/>
+  </properties>
+ </tile>
  <tile id="62">
   <properties>
    <property name="Blocked" value=""/>

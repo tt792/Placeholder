@@ -87,7 +87,7 @@ public class Zombie extends Unit {
 		/*
 		 * if passed what type this zombie is, randomly assign one of the textures for that type of zombie
 		 */
-		type = Nature.Zombie;
+		type = nature.Zombie;
 		zombieClass = zombieType.Big;
 		if (givenZombieType == zombieType.Big) {
 			//randomly choose the texture for this Zombie

@@ -19,6 +19,18 @@ public class Player extends Unit {
 	}
 	
 	/**
+	 * Boolean array for testing if the player has passed the game
+	 */
+	private boolean pickupsCollected[] = new boolean[2];
+	 
+	/**
+	 * getter for pickupsCollected
+	 */
+	public boolean[] getPickupsCollected() {
+		return pickupsCollected;
+	}
+	
+	/**
 	 * The players class
 	 * @Description
 	 * 		Either Nerd, Jock
@@ -74,7 +86,7 @@ public class Player extends Unit {
 	/**
 	 * The stamina of the player, defining how far they can run
 	 */
-	private int stamina, maxStamina;
+	private int stamina, maxStamina, staminaRegenDelay = 2;
 	
 	/**
 	 * Function to return the value of the players stamina
@@ -100,6 +112,11 @@ public class Player extends Unit {
 	 * 		Will increase as the player defeats Zombies and moves through locations
 	 */
 	private int credits;
+	
+	/**
+	 * List of all pickups in the game
+	 */
+	private Pickup[] itemList = new Pickup[3];
 	
 	/**
 	 * Function to return the value of the players credits
@@ -143,47 +160,65 @@ public class Player extends Unit {
 	 * @Description
 	 * 		Takes the player type and builds the player around that, is for creating a new player at the beginning of the game </br>
 	 * 		Use other constructor for loading a player into the game
+	 * @implementation (F10) Used to create the player class as selected from the menu system
 	 */
 	public Player(playerType givenType) {
-		sprite = new Sprite(new Texture("testPlayer.png"));
-		addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "Medkit1.png"));
-		type = Nature.Player;
+		itemList[0] = new Pickup("Sneakers", itemType.Sneakers, "These help you sneak", 5, "Speedup.png", new Vector2(16, 90), 0); //add the 3 powerups
+		itemList[1] = new Pickup("MedKit", itemType.HealthItem, "This will heal you 3", 5, "Medkit1.png", new Vector2(16, 70), 0);
+		itemList[2] = new Pickup("Speedos", itemType.Speedos, "You feel streamlined", 5, "Speedos.png", new Vector2(70,50), 1);
+		addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "Medkit1.png", new Vector2(0,0), 0)); //give the player no health item to begin with
+		type = nature.Player;
 		playerClass = givenType;
-		updateLevel(Placeholder.currentLevel);
+		updateLevel(Placeholder.currentLevel); //give the player the level walls for collisions
+		setXY(new Vector2(0, 0)); //set to where the start of the player is
 		if (givenType == playerType.Nerd) {
 			//update the image for it
-			addItemToInventory(new Pickup("Wimpy Fists", itemType.Weapon, "Your wimpy nerd fists aernt going to do anything against these zombies", 1, "Sword.png"));
+			sprite = new Sprite(new Texture("player1_updown.png"));
+			addItemToInventory(new Pickup("Wimpy Fists", itemType.Weapon, "Your wimpy nerd fists aernt going to do anything against these zombies", 1, "Sword.png", new Vector2(0,0), 0));
 			maxHealth = 3;
 			currentHealth = maxHealth;
 			stealth = 3;
 			speed = 3;
-			sprintSpeed = 5;
+			sprintSpeed = 2;
 			stamina = 30;
 			maxStamina = stamina;
-			setXY(new Vector2(0, 0)); //set to where the start of the layer is
 		} else if (givenType == playerType.Jock) {
 			//update the image for it
-			addItemToInventory(new Pickup("Fists", itemType.Weapon, "Your strong fists allow you to easily get through these enemies", 3, "Sword.png"));
-			maxHealth = 4;
+			sprite = new Sprite(new Texture("player2_updown.png"));
+			addItemToInventory(new Pickup("Fists", itemType.Weapon, "Your strong fists allow you to easily get through these enemies", 3, "Sword.png", new Vector2(0,0), 0));
+			maxHealth = 5;
 			currentHealth = maxHealth;
 			stealth = 0;
-			speed = 5;
-			sprintSpeed = 7;
-			stamina = 40;
+			speed = 2;
+			sprintSpeed = 2;
+			stamina = 50;
 			maxStamina = stamina;
 		} else if (givenType == playerType.Art) { //TODO: the third class in the game
-			addItemToInventory(new Pickup("Medicinal Herbs", itemType.HealthItem,"Feels good man...", 0, "Medkit1.png"));
+			addItemToInventory(new Pickup("Medicinal Herbs", itemType.HealthItem,"Feels good man...", 0, "Medkit1.png", new Vector2(0,0), 0));
 			//peeeeeeeeta hide yourself by drawing rocks....
 		}
-		addPickupToRender(new Pickup("MedKit1", itemType.Sneakers, "This will heal you 1", 5, "Speedup.png"), 16, 50); //adds an item in the world
-		addPickupToRender(new Pickup("MedKit2", itemType.HealthItem, "This will heal you 2", 5, "Medkit2.png"), 64, 50);
-		addPickupToRender(new Pickup("MedKit3", itemType.HealthItem, "This will heal you 3", 5, "Medkit3.png"), 16, 70);
 	}
 	
+	
+	/**
+	 * Function to change the pickups and and map for player collisions
+	 * @implementation (F1) Used to update the players map for wall collisions
+	 */
 	public void updateLevel(int currentLevel) {
 		map = new TmxMapLoader().load(Placeholder.levelList[currentLevel]);
-		collisionLayer = null;
-		collisionLayer = (TiledMapTileLayer)map.getLayers().get("Walls");
+		collisionLayer = (TiledMapTileLayer)map.getLayers().get("Walls"); //update the map with the new tileset
+		for (int i = 0; i < itemList.length; i++) {
+			if (itemList[i] != null) {
+				if (itemList[i].getLevel() == currentLevel) {
+					addPickupToRender(itemList[i]);
+				} else {
+					removePickupToRender(itemList[i]);
+				}
+			}
+		}
+		//when change the level to be law
+		//add in the second power up
+		//remember to remove it when leave law
 	}
 	
 	/**
@@ -199,10 +234,10 @@ public class Player extends Unit {
 		 * can get the max health, stealth, speed from what type the player is
 		 * ie. if the players a Nerd they have x health, y speed and u 
 		 */
-		sprite = new Sprite(new Texture("Player.png"));
-		addItemToInventory(new Pickup("Fists", itemType.Weapon, "These are your fists, time to go hit some zombies", 1, "Sword.png"));
-		addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "HealthPack.png"));
-		type = Nature.Player;
+		sprite = new Sprite(new Texture("testPlayer.png"));
+		addItemToInventory(new Pickup("Fists", itemType.Weapon, "These are your fists, time to go hit some zombies", 1, "Sword.png", new Vector2(0,0), 0));
+		addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "HealthPack.png", new Vector2(0,0), 0));
+		type = nature.Player;
 		maxHealth = givenMaxHealth;
 		speed = givenSpeed;
 		stamina = givenStamina;
@@ -238,7 +273,7 @@ public class Player extends Unit {
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 			if (sprintHeld() && stamina > 0) {
 				if (testForCollision("UP")) {
-					xy.y += sprintSpeed;
+					xy.y += speed + sprintSpeed;
 					stamina -= 1;
 				}
 			} else {
@@ -250,7 +285,7 @@ public class Player extends Unit {
 		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 			if (sprintHeld() && stamina > 0) {
 				if (testForCollision("DOWN")) {
-					xy.y -= sprintSpeed;
+					xy.y -= speed + sprintSpeed;
 					stamina -= 1;
 				}
 			} else {
@@ -262,7 +297,7 @@ public class Player extends Unit {
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			if (sprintHeld() && stamina > 0) {
 				if (testForCollision("LEFT")) {
-					xy.x -= sprintSpeed;
+					xy.x -= speed + sprintSpeed;
 					stamina -= 1;
 				}
 			} else {
@@ -274,7 +309,7 @@ public class Player extends Unit {
 		if(Gdx.input.isKeyPressed(Input.Keys.D)) {
 			if (sprintHeld() && stamina > 0) {
 				if (testForCollision("RIGHT")) {
-					xy.x += sprintSpeed;
+					xy.x += speed + sprintSpeed;
 					stamina -= 1;
 				}
 			} else {
@@ -295,19 +330,24 @@ public class Player extends Unit {
 	
 	/**
 	 * Function to test if the player is touching a pickup
+	 * @implementation (F15) Used to detect and act when the player picks up an item
 	 */
 	private void itemCollision() {
 		for (int i = 0; i < pickupList.length; i++) {
 			if (pickupList[i] != null) {
-				if (this.sprite.getBoundingRectangle().overlaps(pickupList[i].sprite.getBoundingRectangle())) { //doesnt work sometimes for some reason
-					if (pickupList[i].getType() == itemType.Weapon || pickupList[i].getType() == itemType.HealthItem) {
+				if (this.sprite.getBoundingRectangle().overlaps(pickupList[i].sprite.getBoundingRectangle())) {
+					if (pickupList[i].getType() == itemType.Weapon) {
+						pickupItem(pickupList[i]);
+					} else if (pickupList[i].getType() == itemType.HealthItem) {
 						pickupItem(pickupList[i]);
 					} else if(pickupList[i].getType() == itemType.Sneakers){
-						removePickupToRender(pickupList[i]);
+						addPowerup(pickupList[i]);
 						changeStealth(pickupList[i].getEffect());
-					} else if(pickupList[i].getType() == itemType.Speedos) {
 						removePickupToRender(pickupList[i]);
+					} else if(pickupList[i].getType() == itemType.Speedos) {
+						addPowerup(pickupList[i]);
 						changeSpeed(pickupList[i].getEffect());
+						removePickupToRender(pickupList[i]);
 					}
 				}
 			}
@@ -317,23 +357,47 @@ public class Player extends Unit {
 	/**
 	 * Function to add item to inventory,
 	 * removes the old item from the inventory
+	 * @implementation (F15) Used to act when the player picks up a Weapon or HealthItem
 	 */
 	private void pickupItem(Pickup item) {
 		removePickupToRender(item); //stop displaying the item thats been picked up
-		addPickupToRender(addItemToInventory(item), getX(), getY()); //add that item to the inventory and draw what used to be in the inventory
+		addPickupToRender(addItemToInventory(item)); //add that item to the inventory and draw what used to be in the inventory
+		addPowerup(item);
+	}
+	
+	/**
+	 * Function to note that the player has picked up a powerup
+	 * @implementation (F15) Used to act when the player picks up a Power Up
+	 */
+	private void addPowerup(Pickup item) {
+		/*
+		 * 0th slot is for sneakers
+		 * 1st slot is for speedos
+		 */
+		for (int i = 0; i < itemList.length; i++) {
+			if (item == itemList[i]) {
+				itemList[i] = null;
+			}
+		}
+		if (item.getType() == itemType.Sneakers) {
+			pickupsCollected[0] = true;
+		} else if (item.getType() == itemType.Speedos) {
+			pickupsCollected[1]	= true;
+		}
 	}
 	
 	/**
 	 * Function to add a pickup to be rendered
+	 * @implementation (F15) Used to ensure a dropped item is rendered
 	 */
-	private void addPickupToRender(Pickup item, float givenX, float givenY) {
+	private void addPickupToRender(Pickup item) {
 		if (item.getName() != "None") {
 			Pickup tempPickup[] = new Pickup[pickupList.length + 1];
 			for (int i = 0; i < pickupList.length; i++) {
 				tempPickup[i] = pickupList[i];
 			}
 			tempPickup[tempPickup.length - 1] = item;
-			tempPickup[tempPickup.length - 1].sprite.setPosition(givenX, givenY + 64);
+			tempPickup[tempPickup.length - 1].sprite.setPosition(item.getXY().x, item.getXY().y);
 			pickupList = tempPickup;
 		}
 	}
@@ -341,9 +405,10 @@ public class Player extends Unit {
 	/**
 	 * Function to remove a pickup from being rendered
 	 * 	 * ie. when the player picks up an item
+	 * @implementation (F15) Used to ensure a picked up item is no longer rendered
 	 */
-	private void removePickupToRender(Pickup item) { //stop rendering the item the player touched
-		int num = 0;
+	private void removePickupToRender(Pickup item) { //stop rendering the item the player touched or if switching level
+		int num = -1; //cannot be -1 after this loop, to make sure the item passed is in the list
 		Pickup tempPickup[] = new Pickup[pickupList.length - 1];
 		for (int i = 0; i < pickupList.length; i++) {
 			if (pickupList[i] == item) {
@@ -351,19 +416,21 @@ public class Player extends Unit {
 				break;
 			}
 		}
-		if (num == 0) {
-			for (int i = 0; i < tempPickup.length; i++) {
-				tempPickup[i] = pickupList[i+1];
+		if (num != -1) {
+			if (num == 0) {
+				for (int i = 0; i < tempPickup.length; i++) {
+					tempPickup[i] = pickupList[i+1];
+				}
+			} else {
+				for (int i = 0; i < num; i++) {
+					tempPickup[i] = pickupList[i];
+				}
+				for (int i = num + 1; i < tempPickup.length; i++) {
+					tempPickup[i] = pickupList[i+1];
+				}
 			}
-		} else {
-			for (int i = 0; i < num; i++) {
-				tempPickup[i] = pickupList[i];
-			}
-			for (int i = num + 1; i < tempPickup.length; i++) {
-				tempPickup[i] = pickupList[i+1];
-			}
+			pickupList = tempPickup;
 		}
-		pickupList = tempPickup;
 	}
 	
 	/**
@@ -443,8 +510,15 @@ public class Player extends Unit {
 	 * Function to increase the stamina of the player if they are not currently running+
 	 */
 	private void updateStamina() {
-		if (stamina < maxStamina && !sprintHeld()) {
-			stamina += 1;
+		if (sprintHeld()) {
+			staminaRegenDelay = 100;
+		}
+		if (staminaRegenDelay > 0) {
+			staminaRegenDelay -= Gdx.graphics.getDeltaTime();
+		} else {
+			if (stamina < maxStamina) {
+				stamina += 1;
+			}
 		}
 	}
 	
@@ -463,6 +537,7 @@ public class Player extends Unit {
 	
 	/**
 	 * Changes the players health depending on the healthItem pickup in the players inventory
+	 * @implementation (F15) Used to act when a HealthItem is used
 	 */
 	void useHealthItem() {
 		if (inventory[1].getName() != "None") { //if the name is None then the player has no health item
@@ -471,7 +546,7 @@ public class Player extends Unit {
 			} else {
 				currentHealth = maxHealth;
 			}
-			addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "Medkit1.png"));
+			addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "Medkit1.png", new Vector2(0,0), 0));
 		}
 	}
 } 

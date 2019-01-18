@@ -2,6 +2,7 @@ package com.placeholder.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Class for all pickups including weapons
@@ -29,6 +30,22 @@ public class Pickup {
 	 * A describer for this pickup
 	 */
 	private String description;
+	
+	/**
+	 * The placement of this pickup
+	 */
+	private Vector2 xy;
+	public Vector2 getXY() {
+		return xy;
+	}
+	
+	/**
+	 * which level the item shows up in
+	 */
+	private int level;
+	public int getLevel() {
+		return level;
+	}
 	
 	/**
 	 * The name of this Pickup
@@ -80,11 +97,13 @@ public class Pickup {
 	 * 		- Effect <br>
 	 * 		- Texture <br>
 	 */
-	public Pickup(String givenName, itemType givenType, String givenDescription, int givenEffect, String givenFileName) {
+	public Pickup(String givenName, itemType givenType, String givenDescription, int givenEffect, String givenFileName, Vector2 givenXY, int givenLevel) {
 		name = givenName;
 		type = givenType;
 		description = givenDescription;
 		effect = givenEffect;
 		sprite = new Sprite(new Texture(givenFileName));
+		xy = givenXY;
+		level = givenLevel;
 	}
 }
