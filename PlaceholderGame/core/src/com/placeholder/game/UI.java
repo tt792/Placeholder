@@ -47,7 +47,7 @@ public class UI {
 		
 		//Add all of the widgets onto the table
 		//table.add(title).height(100);
-		table.add(logo);
+		table.add(logo).padBottom(20).height(200).width(200);
 		table.row();
 		table.add(start).padBottom(20).height(30).width(100);
 		table.row();
@@ -112,7 +112,6 @@ public class UI {
 		title = new Label("Generic: Zombie Game", skin);
 		
 		logo = new Image(new Texture("logo.png"));
-		logo.scaleBy(4);
 		
 		start = new TextButton("Start", skin);
 		start.addListener(new ClickListener() { 
