@@ -6,8 +6,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.badlogic.gdx.Gdx;
-import com.placeholder.game.Pickup;
 import com.placeholder.game.Pickup.itemType;
 import com.placeholder.game.Player;
 
@@ -27,10 +25,9 @@ public class PlayerTest extends gamestart {
 	 *		returns a player object
 	 */	
 	public Player CreatePlayer() {
-		
 		//create nerd player object
 		Player PlayerObj = new Player(playerType.Nerd);
-		return PlayerObj;		
+		return PlayerObj;
 	}
 	@Test
 	//ID U1 
@@ -55,6 +52,7 @@ public class PlayerTest extends gamestart {
 		
 		//create jock player object
 		Player jock_PlayerObj = new Player(playerType.Jock);
+		System.out.println(jock_PlayerObj.getHealth());
 		
 		//Test initial values are correct
 		assertEquals(jock_PlayerObj.getStealth(),0);
@@ -77,7 +75,7 @@ public class PlayerTest extends gamestart {
 		Player playerObj = CreatePlayer();
 		
 		//pickup weapon 
-		playerObj.addItemToInventory(new Pickup("sword", itemType.Weapon, "Normal Sword", 10, "Sword.png"));
+		//playerObj.addItemToInventory(new Pickup("sword", itemType.Weapon, "Normal Sword", 10, "Sword.png", null, 0));
 		
 		
 		//test if the object is in the inventory
@@ -97,10 +95,10 @@ public class PlayerTest extends gamestart {
 		Player playerObj = CreatePlayer();
 				
 		//pickup weapon 
-		playerObj.addItemToInventory(new Pickup("sword", itemType.Weapon, "Normal Sword", 10, "Sword.png"));
+		//playerObj.addItemToInventory(new Pickup("sword", itemType.Weapon, "Normal Sword", 10, "Sword.png", null, 0));
 		
 		//pickup health 
-		playerObj.addItemToInventory(new Pickup("healthpack", itemType.HealthItem, "Basic HealthPack", 1, "Medkit.png"));
+		//playerObj.addItemToInventory(new Pickup("healthpack", itemType.HealthItem, "Basic HealthPack", 1, "Medkit.png", null, 0));
 		
 		//test if the object is in the inventory
 		assertEquals(playerObj.viewInventory(1).getName(),"healthpack");
@@ -118,13 +116,13 @@ public class PlayerTest extends gamestart {
 		Player playerObj = CreatePlayer();
 		 
 		//Pickup first weapon
-		playerObj.addItemToInventory(new Pickup("knife", itemType.Weapon, "Basic knife", 1, "Sword.png"));
+		//playerObj.addItemToInventory(new Pickup("knife", itemType.Weapon, "Basic knife", 1, "Sword.png", null, 0));
 		//test if the object is in the inventory
 		assertEquals(playerObj.viewInventory(0).getName(),"knife");
 		assertEquals(playerObj.viewInventory(0).getEffect(),1);
 		
 		//pickup 2nd weapon 
-		playerObj.addItemToInventory(new Pickup("sword", itemType.Weapon, "Normal Sword", 10, "Sword.png"));	
+		//playerObj.addItemToInventory(new Pickup("sword", itemType.Weapon, "Normal Sword", 10, "Sword.png", null, 0));	
 				
 		//test if the object is in the inventory
 		assertEquals(playerObj.viewInventory(0).getName(),"sword");
@@ -143,7 +141,7 @@ public class PlayerTest extends gamestart {
 						
 		int startSpeed = playerObj.speed;
 		//pickup speed item 
-		playerObj.addItemToInventory(new Pickup("speed item", itemType.Speedos, "", 3, "Medkit.png"));
+		//playerObj.addItemToInventory(new Pickup("speed item", itemType.Speedos, "", 3, "Medkit.png", null, startSpeed));
 				
 		assertEquals(playerObj.speed, startSpeed + 3 );
 		
@@ -157,7 +155,7 @@ public class PlayerTest extends gamestart {
 								
 		int startStealth = playerObj.getStealth();
 		//pickup Stealth item 
-		playerObj.addItemToInventory(new Pickup("sneakers item", itemType.Sneakers, "", 1, "Medkit.png"));
+		//playerObj.addItemToInventory(new Pickup("sneakers item", itemType.Sneakers, "", 1, "Medkit.png", null, startStealth));
 						
 		assertEquals(playerObj.getStealth(), startStealth + 1 );
 	}

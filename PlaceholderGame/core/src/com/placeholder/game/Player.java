@@ -151,7 +151,7 @@ public class Player extends Unit {
 			tempPickup = inventory[1];
 			inventory[1] = item;
 		}
-		return tempPickup; //passing the old item back to be dropped in the world				
+		return tempPickup; //passing the old item back to be dropped in the world
 	}
 	
 	/**
@@ -163,14 +163,14 @@ public class Player extends Unit {
 	 * @implementation (F10) Used to create the player class as selected from the menu system
 	 */
 	public Player(playerType givenType) {
-		itemList[0] = new Pickup("Sneakers", itemType.Sneakers, "These help you sneak", 5, "Speedup.png", new Vector2(16, 90), 0); //add the 3 powerups
-		itemList[1] = new Pickup("MedKit", itemType.HealthItem, "This will heal you 3", 5, "Medkit1.png", new Vector2(16, 70), 0);
-		itemList[2] = new Pickup("Speedos", itemType.Speedos, "You feel streamlined", 5, "Speedos.png", new Vector2(70,50), 1);
+		itemList[0] = new Pickup("Sneakers", itemType.Sneakers, "These help you sneak", 5, "Speedup.png", new Vector2(5 * 32, 43 * 32), 0); //add the 3 powerups
+		itemList[1] = new Pickup("MedKit", itemType.HealthItem, "This will heal you 3", 5, "Medkit1.png", new Vector2(3 * 32, 24 * 32), 1); //probably want to put this into its own section of code
+		itemList[2] = new Pickup("Speedos", itemType.Speedos, "You feel streamlined", 5, "Speedos.png", new Vector2(70 * 32, 50 * 32), 2);
 		addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "Medkit1.png", new Vector2(0,0), 0)); //give the player no health item to begin with
 		type = nature.Player;
 		playerClass = givenType;
 		updateLevel(Placeholder.currentLevel); //give the player the level walls for collisions
-		setXY(new Vector2(0, 0)); //set to where the start of the player is
+		setXY(new Vector2(15 * 32, 52 * 32)); //set to where the start of the player is (13, 52)
 		if (givenType == playerType.Nerd) {
 			//update the image for it
 			sprite = new Sprite(new Texture("player1_updown.png"));
@@ -206,7 +206,7 @@ public class Player extends Unit {
 	 */
 	public void updateLevel(int currentLevel) {
 		map = new TmxMapLoader().load(Placeholder.levelList[currentLevel]);
-		collisionLayer = (TiledMapTileLayer)map.getLayers().get("Walls"); //update the map with the new tileset
+		collisionLayer = (TiledMapTileLayer)map.getLayers().get("walls"); //update the map with the new tileset
 		for (int i = 0; i < itemList.length; i++) {
 			if (itemList[i] != null) {
 				if (itemList[i].getLevel() == currentLevel) {
@@ -216,9 +216,6 @@ public class Player extends Unit {
 				}
 			}
 		}
-		//when change the level to be law
-		//add in the second power up
-		//remember to remove it when leave law
 	}
 	
 	/**
@@ -335,19 +332,21 @@ public class Player extends Unit {
 	private void itemCollision() {
 		for (int i = 0; i < pickupList.length; i++) {
 			if (pickupList[i] != null) {
-				if (this.sprite.getBoundingRectangle().overlaps(pickupList[i].sprite.getBoundingRectangle())) {
-					if (pickupList[i].getType() == itemType.Weapon) {
-						pickupItem(pickupList[i]);
-					} else if (pickupList[i].getType() == itemType.HealthItem) {
-						pickupItem(pickupList[i]);
-					} else if(pickupList[i].getType() == itemType.Sneakers){
-						addPowerup(pickupList[i]);
-						changeStealth(pickupList[i].getEffect());
-						removePickupToRender(pickupList[i]);
-					} else if(pickupList[i].getType() == itemType.Speedos) {
-						addPowerup(pickupList[i]);
-						changeSpeed(pickupList[i].getEffect());
-						removePickupToRender(pickupList[i]);
+				if (pickupList[i].getLevel() == Placeholder.currentLevel) {
+					if (this.sprite.getBoundingRectangle().overlaps(pickupList[i].sprite.getBoundingRectangle())) {
+						if (pickupList[i].getType() == itemType.Weapon) {
+							pickupItem(pickupList[i]);
+						} else if (pickupList[i].getType() == itemType.HealthItem) {
+							pickupItem(pickupList[i]);
+						} else if(pickupList[i].getType() == itemType.Sneakers){
+							addPowerup(pickupList[i]);
+							changeStealth(pickupList[i].getEffect());
+							removePickupToRender(pickupList[i]);
+						} else if(pickupList[i].getType() == itemType.Speedos) {
+							addPowerup(pickupList[i]);
+							changeSpeed(pickupList[i].getEffect());
+							removePickupToRender(pickupList[i]);
+						}
 					}
 				}
 			}
@@ -391,13 +390,25 @@ public class Player extends Unit {
 	 * @implementation (F15) Used to ensure a dropped item is rendered
 	 */
 	private void addPickupToRender(Pickup item) {
-		if (item.getName() != "None") {
+		boolean test = false;
+		for (int i = 0; i < itemList.length; i++) { //check if the item being dropped is in the itemList
+			if (itemList[i] == item) {
+				test = true;
+			}
+		}
+		if (test == false) { //the item isnt in the itemList
+			Pickup[] tempList = new Pickup[itemList.length + 1];
+			tempList[tempList.length - 1] =item;
+			itemList = tempList;
+		}
+		if (item.getName() != "None") { //if the item isnt an empty item
 			Pickup tempPickup[] = new Pickup[pickupList.length + 1];
 			for (int i = 0; i < pickupList.length; i++) {
 				tempPickup[i] = pickupList[i];
 			}
 			tempPickup[tempPickup.length - 1] = item;
 			tempPickup[tempPickup.length - 1].sprite.setPosition(item.getXY().x, item.getXY().y);
+			tempPickup[tempPickup.length - 1].setLevel(Placeholder.currentLevel);
 			pickupList = tempPickup;
 		}
 	}
@@ -409,27 +420,29 @@ public class Player extends Unit {
 	 */
 	private void removePickupToRender(Pickup item) { //stop rendering the item the player touched or if switching level
 		int num = -1; //cannot be -1 after this loop, to make sure the item passed is in the list
-		Pickup tempPickup[] = new Pickup[pickupList.length - 1];
-		for (int i = 0; i < pickupList.length; i++) {
-			if (pickupList[i] == item) {
-				num = i;
-				break;
-			}
-		}
-		if (num != -1) {
-			if (num == 0) {
-				for (int i = 0; i < tempPickup.length; i++) {
-					tempPickup[i] = pickupList[i+1];
-				}
-			} else {
-				for (int i = 0; i < num; i++) {
-					tempPickup[i] = pickupList[i];
-				}
-				for (int i = num + 1; i < tempPickup.length; i++) {
-					tempPickup[i] = pickupList[i+1];
+		if (pickupList.length != 0) {
+			Pickup tempPickup[] = new Pickup[pickupList.length - 1];
+			for (int i = 0; i < pickupList.length; i++) {
+				if (pickupList[i] == item) {
+					num = i;
+					break;
 				}
 			}
-			pickupList = tempPickup;
+			if (num != -1) {
+				if (num == 0) {
+					for (int i = 0; i < tempPickup.length; i++) {
+						tempPickup[i] = pickupList[i+1];
+					}
+				} else {
+					for (int i = 0; i < num; i++) {
+						tempPickup[i] = pickupList[i];
+					}
+					for (int i = num + 1; i < tempPickup.length; i++) {
+						tempPickup[i] = pickupList[i+1];
+					}
+				}
+				pickupList = tempPickup;
+			}
 		}
 	}
 	
@@ -440,7 +453,7 @@ public class Player extends Unit {
 	 * 			- UP / RIGHT / DOWN / LEFT
 	 * @return Boolean value regarding if the player can move there or not
 	 */
-	private boolean testForCollision(String direction) { //can use this for zombie movement
+	private boolean testForCollision(String direction) { //can use this for zombie movement when zombies are a thing
 		int x1 = 0, y1 = 0, x2 = 0, y2 = 0, offset = 5;
 		//currently only testing the middle of the side player is moving in
 		//later change to be testing multiple points
@@ -507,7 +520,7 @@ public class Player extends Unit {
 	}
 	
 	/**
-	 * Function to increase the stamina of the player if they are not currently running+
+	 * Function to increase the stamina of the player if they are not currently running
 	 */
 	private void updateStamina() {
 		if (sprintHeld()) {
