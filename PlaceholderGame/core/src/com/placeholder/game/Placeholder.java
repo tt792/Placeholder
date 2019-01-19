@@ -62,8 +62,8 @@ public class Placeholder extends ApplicationAdapter {
 		//set up font for things
 		font = new BitmapFont();
 		//list of names of maps
-		levelList[0] = "Map1.tmx";
-		levelList[1] = "Map2.tmx";
+		levelList[0] = "compSci.tmx";
+		levelList[1] = "campusEast.tmx";
 		
 		batch = new SpriteBatch();
 		/*
@@ -95,8 +95,8 @@ public class Placeholder extends ApplicationAdapter {
 				player = new Player(UI.desiredType);
 				playerCreated = true;
 			}
-			
 			player.move();
+			System.out.println("PlayerX: " + (int) (player.getX() / 32) + " PlayerY: " + (int) (player.getY() / 32));
 			updateCam();
 			tiledMapRenderer.setView(camera); //set it so that the map is aligned to the camera
 			tiledMapRenderer.render();
@@ -108,7 +108,9 @@ public class Placeholder extends ApplicationAdapter {
 			//draw the sprites of the various pickups
 			for (int i = 0; i < player.pickupList.length; i++) {
 				if(player.pickupList[i] != null) {
-					player.pickupList[i].sprite.draw(batch);
+					if(player.pickupList[i].getLevel() == currentLevel) {
+						player.pickupList[i].sprite.draw(batch);
+					}
 				}
 			}
 			
@@ -139,25 +141,37 @@ public class Placeholder extends ApplicationAdapter {
 	 */
 	private void changeLevel() {
 		//if the player is in a doorway of a level then need to change the level
-		if (currentLevel == 0) {
-			if ((int) (player.getX() / 32) == 1 && (int) (Math.round(player.getY()) / 32) == 1) { //if the player is in the position
+		if (currentLevel == 0) { //in comp sci
+			if (((int) (player.getX() / 32) == 27 && (int) (Math.round(player.getY()) / 32) == 13) || ((int) (player.getX() / 32) == 28 && (int) (Math.round(player.getY()) / 32) == 13)) { //if the player is in the position
 				//currently hardcoded, should change this to be in an array or so at some point
-				if (levelList[currentLevel] == "Map1.tmx") { //if in the first map TODO change this to be the name of each level
+				if (levelList[currentLevel] == "compSci.tmx") { //if in the first map TODO change this to be the name of each level
 					currentLevel = 1;
 				}
-				player.setXY(new Vector2(5 * 32, 5 * 32));
+				player.setXY(new Vector2(39 * 32, 17 * 32));
 				player.updateLevel(currentLevel);
 				updateLevel();
 			}
-		} else if(currentLevel == 1) {
-			if ((int) (player.getX() / 32) == 1 && (int) (Math.round(player.getY()) / 32) == 1) {
-				if (levelList[currentLevel] == "Map2.tmx") { //if in the first map TODO change this to be the name of each level
+		} else if(currentLevel == 1) { //in east
+			//go to compSci
+			if (((int) (player.getX() / 32) == 39 && (int) (Math.round(player.getY()) / 32) == 16) || ((int) (player.getX() / 32) == 40 && (int) (Math.round(player.getY()) / 32) == 16)) {
+				if (levelList[currentLevel] == "campusEast.tmx") { //if in the first map TODO change this to be the name of each level
 					currentLevel = 0;
 				}
-				player.setXY(new Vector2(0 * 32, 0 * 32));
+				player.setXY(new Vector2(27 * 32, 12 * 32));
 				player.updateLevel(currentLevel);
 				updateLevel();
 			}
+			//go to law&mgmt
+			if (((int) (player.getX() / 32) == 8 && (int) (Math.round(player.getY()) / 32) == 63) || ((int) (player.getX() / 32) == 9 && (int) (Math.round(player.getY()) / 32) == 63)) {
+				if (levelList[currentLevel] == "campusEast.tmx") { //if in the first map TODO change this to be the name of each level
+					currentLevel = 2;
+				}
+				player.setXY(new Vector2(27 * 32, 12 * 32)); //set to law and mgmt start
+				player.updateLevel(currentLevel);
+				updateLevel();
+			}
+		} else if(currentLevel == 2) { //in law
+			
 		}
 	}
 	

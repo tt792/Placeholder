@@ -35,6 +35,10 @@ public class Pickup {
 	 * The placement of this pickup
 	 */
 	private Vector2 xy;
+	
+	/**
+	 * Getter for pickup X and Y
+	 */
 	public Vector2 getXY() {
 		return xy;
 	}
@@ -43,8 +47,18 @@ public class Pickup {
 	 * which level the item shows up in
 	 */
 	private int level;
+	
+	/**
+	 * Getter for pickup level
+	 */
 	public int getLevel() {
 		return level;
+	}
+	/**
+	 * Setter for pickup level
+	 */
+	public void setLevel(int givenLevel) {
+		level = givenLevel;
 	}
 	
 	/**
