@@ -41,7 +41,7 @@ public class Placeholder extends ApplicationAdapter {
 	Player player;
 	private float camX = 0, camY = 0;
 	private Vector2 playerDiff = new Vector2(0f, 0f);
-	public static String[] levelList = new String[2]; //stores the level names from file storage
+	public static String[] levelList = new String[3]; //stores the level names from file storage
 	public static int currentLevel = 0; //number reference to the level number for levelList
 	
 	
@@ -64,7 +64,7 @@ public class Placeholder extends ApplicationAdapter {
 		//list of names of maps
 		levelList[0] = "compSci.tmx";
 		levelList[1] = "campusEast.tmx";
-		
+		levelList[2] = "Law.tmx";
 		batch = new SpriteBatch();
 		/*
 		 * Load and create the tiled map for the player to move around on
@@ -73,12 +73,15 @@ public class Placeholder extends ApplicationAdapter {
 	    tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 		/*
 		 * TODO:
-		 * Change the enemy creation and such so its not done here
+		 * Create enemies here
 		 */
 		
 		//create camera for scene
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		camX = 15 * 32;
+		camY = 52 * 32;
+		camera.position.set(new Vector3(camX, camY, 0));
 		camera.update();
 	}
 
@@ -96,7 +99,6 @@ public class Placeholder extends ApplicationAdapter {
 				playerCreated = true;
 			}
 			player.move();
-			System.out.println("PlayerX: " + (int) (player.getX() / 32) + " PlayerY: " + (int) (player.getY() / 32));
 			updateCam();
 			tiledMapRenderer.setView(camera); //set it so that the map is aligned to the camera
 			tiledMapRenderer.render();
@@ -148,6 +150,9 @@ public class Placeholder extends ApplicationAdapter {
 					currentLevel = 1;
 				}
 				player.setXY(new Vector2(39 * 32, 17 * 32));
+				camX = player.getX();
+				camY = player.getY();
+				camera.position.set(new Vector3(camX, camY, 0));
 				player.updateLevel(currentLevel);
 				updateLevel();
 			}
@@ -158,6 +163,9 @@ public class Placeholder extends ApplicationAdapter {
 					currentLevel = 0;
 				}
 				player.setXY(new Vector2(27 * 32, 12 * 32));
+				camX = player.getX();
+				camY = player.getY();
+				camera.position.set(new Vector3(camX, camY, 0));
 				player.updateLevel(currentLevel);
 				updateLevel();
 			}
@@ -166,12 +174,25 @@ public class Placeholder extends ApplicationAdapter {
 				if (levelList[currentLevel] == "campusEast.tmx") { //if in the first map TODO change this to be the name of each level
 					currentLevel = 2;
 				}
-				player.setXY(new Vector2(27 * 32, 12 * 32)); //set to law and mgmt start
+				player.setXY(new Vector2(15 * 32, 6 * 32));
+				camX = player.getX();
+				camY = player.getY();
+				camera.position.set(new Vector3(camX, camY, 0));
 				player.updateLevel(currentLevel);
 				updateLevel();
 			}
 		} else if(currentLevel == 2) { //in law
-			
+			if (((int) (player.getX() / 32) == 15 && (int) (Math.round(player.getY()) / 32) == 5) || ((int) (player.getX() / 32) == 16 && (int) (Math.round(player.getY()) / 32) == 5)) {
+				if (levelList[currentLevel] == "Law.tmx") { //if in the first map TODO change this to be the name of each level
+					currentLevel = 1;
+				}
+				player.setXY(new Vector2(8 * 32, 62 * 32));
+				camX = player.getX();
+				camY = player.getY();
+				camera.position.set(new Vector3(camX, camY, 0));
+				player.updateLevel(currentLevel);
+				updateLevel();
+			}
 		}
 	}
 	

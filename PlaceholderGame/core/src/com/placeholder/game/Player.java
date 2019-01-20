@@ -165,7 +165,7 @@ public class Player extends Unit {
 	public Player(playerType givenType) {
 		itemList[0] = new Pickup("Sneakers", itemType.Sneakers, "These help you sneak", 5, "Speedup.png", new Vector2(5 * 32, 43 * 32), 0); //add the 3 powerups
 		itemList[1] = new Pickup("MedKit", itemType.HealthItem, "This will heal you 3", 5, "Medkit1.png", new Vector2(3 * 32, 24 * 32), 1); //probably want to put this into its own section of code
-		itemList[2] = new Pickup("Speedos", itemType.Speedos, "You feel streamlined", 5, "Speedos.png", new Vector2(70 * 32, 50 * 32), 2);
+		itemList[2] = new Pickup("Speedos", itemType.Speedos, "You feel streamlined", 5, "Speedos.png", new Vector2(15 * 32, 30 * 32), 2);
 		addItemToInventory(new Pickup("None", itemType.HealthItem,"You have no health item", 0, "Medkit1.png", new Vector2(0,0), 0)); //give the player no health item to begin with
 		type = nature.Player;
 		playerClass = givenType;
